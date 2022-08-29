@@ -1,0 +1,13 @@
+<br>
+
+<p>Nombre</p>
+<input type="text" [(ngModel)]="this.usuario.nombre">
+
+
+<p>Apellido</p>
+<input type="text" [(ngModel)]="this.usuario.apellido">
+
+<br><br>
+
+<input type="button" (click)="this.cambiarNombre()" value="Cambiar Nombre">
+<input type="button" (click)="this.cambiarApellido()" value="Cambiar Apellido">
