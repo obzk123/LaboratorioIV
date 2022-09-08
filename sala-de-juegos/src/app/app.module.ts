@@ -4,17 +4,21 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { JuegoComponent } from './Vistas/juego/juego.component';
+import { MenuComponent } from './Vistas/menu/menu.component';
+import { AboutMeComponent } from './Vistas/about-me/about-me.component';
+import { HomeComponent } from './Vistas/home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    JuegoComponent
+    MenuComponent,
+    AboutMeComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
