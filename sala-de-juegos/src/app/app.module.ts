@@ -1,26 +1,41 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MenuComponent } from './Vistas/menu/menu.component';
-import { AboutMeComponent } from './Vistas/about-me/about-me.component';
-import { HomeComponent } from './Vistas/home/home.component';
+import { LoginModule } from 'src/app/Modulos/login/login.module';
+import { JuegosModule } from './Modulos/juegos/juegos.module';
+import { HomeModule } from './Modulos/home/home.module';
+import { PaginaNoEncontradaComponent } from './Vistas/pagina-no-encontrada/pagina-no-encontrada.component';
+
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { environment } from 'src/environments/environment';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    MenuComponent,
-    AboutMeComponent,
-    HomeComponent,
+    PaginaNoEncontradaComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    LoginModule,
+    JuegosModule,
+    HomeModule,
+    provideFirebaseApp(()=> initializeApp(environment.firebase)),
+    provideAuth(()=> getAuth()),
+    provideFirestore(() => getFirestore())
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+
+export class AppModule { 
+}
