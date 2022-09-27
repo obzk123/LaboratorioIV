@@ -12,8 +12,14 @@ const routes: Routes = [
     ...canActivate(()=> redirectLoggedInTo(['/home']))
   },
   {
+    path:'chat',
+    loadChildren: ()=> import('src/app/Modulos/chat/chat.module').then(m=>m.ChatModule),
+    ...canActivate(()=> redirectUnauthorizedTo(['/']))
+  },
+  {
     path:'juegos',
-    loadChildren: ()=> import('src/app/Modulos/juegos/juegos.module').then(m => m.JuegosModule)
+    loadChildren: ()=> import('src/app/Modulos/juegos/juegos.module').then(m => m.JuegosModule),
+    ...canActivate(()=> redirectUnauthorizedTo(['/']))
   },
   {
     path:'about-me',

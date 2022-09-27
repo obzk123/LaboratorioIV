@@ -5,9 +5,6 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginModule } from 'src/app/Modulos/login/login.module';
-import { JuegosModule } from './Modulos/juegos/juegos.module';
-import { HomeModule } from './Modulos/home/home.module';
 import { PaginaNoEncontradaComponent } from './Vistas/pagina-no-encontrada/pagina-no-encontrada.component';
 
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -26,9 +23,6 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    LoginModule,
-    JuegosModule,
-    HomeModule,
     provideFirebaseApp(()=> initializeApp(environment.firebase)),
     provideAuth(()=> getAuth()),
     provideFirestore(() => getFirestore())

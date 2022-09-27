@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user.email = JSON.stringify(this.authService.GetDataUser()?.email);
+    this.user.email = <string>this.authService.GetDataUser()?.email;
   }
 
   SignOut()
