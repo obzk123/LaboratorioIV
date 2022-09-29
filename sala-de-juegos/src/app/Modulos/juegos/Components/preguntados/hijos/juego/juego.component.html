@@ -1,0 +1,17 @@
+<html>
+    <div class="divCentral">
+        <img [src]="this.pregunta.imagen"   width="200px" height="200px">
+        <br>
+        <label class="titulo">{{this.pregunta.pregunta}}</label>
+        <br>
+        <input class='botones' type="button" value={{this.pregunta.respuesta1}} (click)="this.ValidarCorrecta(1)">
+        <br>
+        <input class='botones' type="button" value={{this.pregunta.respuesta2}} (click)="this.ValidarCorrecta(2)">
+        <br>
+        <input class='botones' type="button" value={{this.pregunta.respuesta3}} (click)="this.ValidarCorrecta(3)">
+        <br>
+        <input class='botones' type="button" value={{this.pregunta.respuesta4}} (click)="this.ValidarCorrecta(4)">
+        <br>
+        <label class="foot">Categoria: {{this.pregunta.categoria}}</label>
+    </div>
+</html>

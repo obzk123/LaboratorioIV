@@ -102,27 +102,51 @@ body {
     }
   }
 
-  .contenedorCartas
-  {
-    position: absolute;
-    left: 650px;
-    top: 15px;
-    height: 935px;
-    width: 800px;
-  }
 
-  .cartas
-  {
-    position: fixed;
-    border: 2px solid rgb(0, 0, 0);
-    border-radius: 7px;
-    height: 420px;
-    width: 300px;
-  }
+.divCentral
+{
+  position: absolute;
+  width: 600px; 
+  height: 610px;
+  margin-top: 150px;
+  margin-left: 754px;
+  background-color: #3a4379;
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 20px;
+  font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
+}
 
-  .boton
-  {
-    position: fixed;
-    top: 390px;
-  }
-  
+.puntos
+{
+  font-size: 35px;
+  margin: 10px;
+  color: white;
+}
+
+.ruleta
+{
+  margin: 20px;
+  animation-name: spin;
+  animation-duration: 3s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+.boton
+{
+  position: fixed;
+  left: 1010px;
+  top: 380px;
+  transition: all .2s,box-shadow .08s ease-in;
+}
+
+.boton:hover
+{
+  filter: drop-shadow(0px 0px 30px rgb(255, 0, 0));
+}
+
+.boton:active 
+{
+  transform: translateY(4px);
+}

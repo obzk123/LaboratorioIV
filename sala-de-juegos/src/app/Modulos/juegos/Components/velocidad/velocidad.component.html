@@ -115,60 +115,26 @@
 
   <div class="b-example-divider"></div>
 
+  <div class="divJuego">
+    <label class="labelPuntos">Puntos: {{this.puntos}}</label>
+    <br>
+    <ng-container *ngFor="let letra of [].constructor(16); let i = index">
+        <input type="button" class="botonJuego" (click)="this.ClickBoton(i)" value="Click me" style="visibility: {{this.display[i]}}; display:inline;">
+        <br *ngIf="i==3 || i==7 || i==11">
+    </ng-container>
+  </div>
 
-  <div class="contenedorCartas">
-
-    <div class="cartas">
-      <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Ahorcado" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Ahorcado</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Ahorcado</text></svg>
-      <div class="card-body">
-        <p class="card-text">Tienes que adivinar la palabra oculta con tan solo 5 intentos</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="boton">
-            <button type="button" class="btn btn-sm btn-outline-secondary" routerLink="/juegos/ahorcado">Play</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  <div class="cartas" style="left: 1150px;">
-    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Mayor o menor</text></svg>
-    <div class="card-body">
-      <p class="card-text">Se te mostrara una primera carta de un mazo de 12 tu tienes que elegir si la siguiente sera mayor o menor, no puede ser igual.</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="boton">
-          <button type="button" class="btn btn-sm btn-outline-secondary" routerLink="/juegos/mayor-menor">Play</button>
-        </div>
-      </div>
+  <div class="divPerdiste" *ngIf="this.perdio == true">
+    <div class="divMensaje">
+      <label>Perdiste</label>
+      <br>
+      <label>Tu puntacion fue de {{this.puntos}}</label>
+      <br>
+      <input type="button" class="boton" value="Reintentar" (click)="this.RecargarJuego()">
     </div>
   </div>
 
-  <div class="cartas" style="top:480px;">
-    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Ruleta</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Prueba tu velocidad</text></svg>
-    <div class="card-body">
-      <p class="card-text">Prueba tu velocidad, haz click sobre el boton antes que desaparezca, la velocidad va incrementando a medida que sumes puntos.</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <div style="position: absolute; top:370px;">
-          <button type="button" class="btn btn-sm btn-outline-secondary" routerLink="/juegos/velocidad">Play</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="cartas" style="left: 1150px; top:480px">
-    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Preguntados</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Preguntados</text></svg>
-    <div class="card-body">
-      <p class="card-text">Gira la ruleta y dependiendo la categoria tendras que responder.</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <div style="position: absolute; top:370px;">
-          <button type="button" class="btn btn-sm btn-outline-secondary" routerLink="/juegos/preguntados">Play</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
 </main>
 </body>
 </html>
-
-
