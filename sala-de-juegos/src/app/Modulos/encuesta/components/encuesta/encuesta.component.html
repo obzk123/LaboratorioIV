@@ -72,7 +72,7 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <button routerLink="/home" class="nav-link active" aria-current="page">
+        <button routerLink="/home" class="nav-link text-white" aria-current="page">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
           Home
         </button>
@@ -89,23 +89,14 @@
           Games
         </button>
       </li>
-
       <li>
-        <button href="#" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-          Profile
-        </button>
-      </li>
-
-      <li>
-        <button routerLink="/encuesta" class="nav-link text-white">
+        <button routerLink="/encuesta" class="nav-link active">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
           Encuesta
         </button>
       </li>
-
       <li>
-        <button (click)="this.SignOut()" class="nav-link text-white">
+        <button  class="nav-link text-white">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
             <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
@@ -114,16 +105,65 @@
         </button>
       </li>
     </ul>
-
     <hr>
     <label>Octavio Bill Zito <a href="about-me">About me</a></label>
   </div>
-
   <div class="b-example-divider"></div>
-</main>
-  
-</body>
 
+  <div>
+    <form [formGroup]="this.formEncuesta" (ngSubmit)="this.Enviar()">
+
+      <label>Nombre</label><br>
+      <input type="text" formControlName="nombre" placeholder="Ingrese tu nombre">
+      <div *ngIf="this.formEncuesta.controls['nombre'].errors?.['required']">Nombre es requerido.</div>
+      <div *ngIf="this.formEncuesta.controls['nombre'].errors?.['minlength']">El nombre debe tener como minimo 4 caracteres.</div>
+      <div *ngIf="this.formEncuesta.controls['nombre'].errors?.['maxlength']">El nombre debe tener como maximo 12 caracteres.</div>
+      
+      <label>Apellido</label><br>
+      <input type="text" formControlName="apellido" placeholder="Ingrese tu apellido">
+      <div *ngIf="this.formEncuesta.controls['apellido'].errors?.['required']">Apellido es requerido.</div>
+      <div *ngIf="this.formEncuesta.controls['apellido'].errors?.['minlength']">El apellido debe tener como minimo 4 caracteres.</div>
+      <div *ngIf="this.formEncuesta.controls['apellido'].errors?.['maxlength']">El apellido debe tener como maximo 12 caracteres.</div>
+
+      <label>Edad</label><br>
+      <input type="number" formControlName="edad" placeholder="Ingrese tu edad">
+      <div *ngIf="this.formEncuesta.controls['edad'].errors?.['required']">La edad es requerida.</div>
+      <div *ngIf="this.formEncuesta.controls['edad'].errors?.['min']">La edad minima es 18.</div>
+      <div *ngIf="this.formEncuesta.controls['edad'].errors?.['max']">La edad maxima es 99.</div>
+      
+      <label>Telefono</label><br>
+      <input type="number" formControlName="telefono" placeholder="Ingrese tu telefono">
+      <div *ngIf="this.formEncuesta.controls['telefono'].errors?.['required']">El telefono es requerido.</div>
+      <div *ngIf="this.formEncuesta.controls['telefono'].errors?.['min']">El telefono debe tener como minimo 6 caracteres.</div>
+      <div *ngIf="this.formEncuesta.controls['telefono'].errors?.['max']">El telefono debe tener como maximo 10 caracteres.</div>
+      
+      <label>¿Cual juego fue su favorito?</label><br>
+      <select formControlName="juegofavorito">
+        <option>Ahorcado</option>
+        <option>Preguntados</option>
+        <option>Test de velocidad</option>
+        <option>Mayor o menor</option>
+      </select>
+
+
+      <br><label>¿Qué es lo que mas te gusto de la pagina?</label><br>
+      <input type="text" formControlName="respuesta" placeholder="Ingrese tu respuesta">
+      <div *ngIf="this.formEncuesta.controls['respuesta'].errors?.['required']">La respuesta es requerida.</div>
+      <div *ngIf="this.formEncuesta.controls['respuesta'].errors?.['minlength']">La respuesta debe tener como minimo 6 caracteres.</div>
+      <div *ngIf="this.formEncuesta.controls['respuesta'].errors?.['maxlength']">La respuesta debe tener como maximo 25 caracteres.</div>
+            
+      <br>
+      <label>Acepta los terminos y condiciones</label>
+      <br>
+      <input type="checkbox" formControlName="condiciones">
+      <br>
+
+      <div *ngIf="this.error == true">Error no completo todos los datos</div>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</main>
+</body>
 </html>
 
 

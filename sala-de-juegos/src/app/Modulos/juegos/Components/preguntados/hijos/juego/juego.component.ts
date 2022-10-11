@@ -22,12 +22,12 @@ export class JuegoComponent implements OnInit {
     this.preguntas = Array<Pregunta>();
     this.pregunta = new Pregunta();
     this.categoria = '';
-    this.preguntas.push(Pregunta.CargarPregunta('imagen', 'deportes', '¿Cual es el jugador que tiene mas balones de oro?', 'Cristiano Ronaldo', 'Neymar Junior', 'Kylian Mbappe', 'Lionel Messi', 4));
-    this.preguntas.push(Pregunta.CargarPregunta('imagen', 'arte', 'Arte', 'r1', 'r2', 'r3(Correcta)', 'r4', 3));
-    this.preguntas.push(Pregunta.CargarPregunta('imagen', 'cine', 'Cine', 'r1', 'r2(Correcta)', 'r3', 'r4', 2));
-    this.preguntas.push(Pregunta.CargarPregunta('imagen', 'geografia', 'Geografia', 'r1(Correcta)', 'r2', 'r3', 'r4', 1));
-    this.preguntas.push(Pregunta.CargarPregunta('imagen', 'ciencia', 'Ciencia', 'r1(Correcta)', 'r2', 'r3', 'r4', 1));
-    this.preguntas.push(Pregunta.CargarPregunta('imagen', 'historia', 'Historia', 'r1(Correcta)', 'r2', 'r3', 'r4', 1));
+    this.preguntas.push(Pregunta.CargarPregunta('', 'deportes', '¿Cual es el jugador que tiene mas balones de oro?', 'Cristiano Ronaldo', 'Neymar Junior', 'Kylian Mbappe', 'Lionel Messi', 4));
+    this.preguntas.push(Pregunta.CargarPregunta('', 'arte', 'Arte', 'r1', 'r2', 'r3(Correcta)', 'r4', 3));
+    this.preguntas.push(Pregunta.CargarPregunta('', 'cine', 'Cine', 'r1', 'r2(Correcta)', 'r3', 'r4', 2));
+    this.preguntas.push(Pregunta.CargarPregunta('', 'geografia', 'Geografia', 'r1(Correcta)', 'r2', 'r3', 'r4', 1));
+    this.preguntas.push(Pregunta.CargarPregunta('', 'ciencia', 'Ciencia', 'r1(Correcta)', 'r2', 'r3', 'r4', 1));
+    this.preguntas.push(Pregunta.CargarPregunta('', 'historia', 'Historia', 'r1(Correcta)', 'r2', 'r3', 'r4', 1));
   }
 
   ngOnInit() 
@@ -64,6 +64,7 @@ export class JuegoComponent implements OnInit {
     let randomImagen = Math.floor(Math.random() * 10);
     this.https.getImage('https://api.pexels.com/v1/search?query=' + buscar).subscribe((response:any)=>{
       let urlFoto = response;
+      console.log(response);
       this.pregunta.imagen = urlFoto['photos'][randomImagen]['src']['original'];
     });
   }

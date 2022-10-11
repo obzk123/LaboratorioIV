@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { timeInterval } from 'rxjs';
 import { AuthService } from 'src/app/Servicios/AuthService/auth.service';
+import { FirestorageService } from 'src/app/Servicios/FireStorage/firestorage.service';
 
 @Component({
   selector: 'app-velocidad',
@@ -15,13 +16,26 @@ export class VelocidadComponent implements OnInit {
   public perdio:boolean;
   public tiempoMS:number;
   public puntos:number;
+  private email:any;
+  public highscore = '';
 
-  constructor(private router:Router, public authService:AuthService) { 
+  constructor(private router:Router, public authService:AuthService, private firestorage:FirestorageService) { 
     this.display = new Array<string>(16);
     this.display.fill('hidden',0,16);
     this.perdio = false;
     this.tiempoMS = 2000;
     this.puntos = 0;
+    this.obtenerDatosUsuario();
+  }
+
+  async obtenerDatosUsuario()
+  {
+    this.email = this.authService.GetDataUser()?.email;
+    await this.firestorage.GetHighScore(<string>this.email, 'testvelocidad').then(numero=>
+      {
+        console.log(this.email);
+        this.highscore = JSON.stringify(numero);
+      });
   }
 
   ngOnInit(): void {
@@ -53,6 +67,10 @@ export class VelocidadComponent implements OnInit {
     if(this.perdio)
     {
       clearInterval(this.interval);
+      if(this.puntos > JSON.parse(this.highscore))
+      {
+        this.firestorage.ModificarHighScore(<string>this.email, this.puntos, 'testvelocidad');
+      }
     }
     else
     {

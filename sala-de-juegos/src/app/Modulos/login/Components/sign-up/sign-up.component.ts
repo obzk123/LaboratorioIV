@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/Servicios/AuthService/auth.service';
 import { Usuario } from 'src/app/Entidades/usuario';
 import { MensajeErrorService } from 'src/app/Servicios/MensajeError/mensaje-error.service';
+import { FirestorageService } from 'src/app/Servicios/FireStorage/firestorage.service';
 
 
 
@@ -18,7 +19,7 @@ export class SignUpComponent implements OnInit {
   public variableError = false;
   public mensajeError:string;
 
-  constructor(private router:Router, private AuthService:AuthService, private errorMensaje:MensajeErrorService) {
+  constructor(private router:Router, private AuthService:AuthService, private errorMensaje:MensajeErrorService, private fireStore:FirestorageService) {
     this.user = new Usuario();
     this.mensajeError = '';
    }
@@ -36,6 +37,7 @@ export class SignUpComponent implements OnInit {
     this.AuthService.SignUp(this.user.email, this.user.password)
     .then(response=>
       {
+        this.fireStore.AgregarUsuario(this.user.email);
         this.ChangePage('login/sign-in');
         console.log("Registrado con exito");
       })

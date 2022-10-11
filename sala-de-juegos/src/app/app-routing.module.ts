@@ -22,6 +22,11 @@ const routes: Routes = [
     ...canActivate(()=> redirectUnauthorizedTo(['/']))
   },
   {
+    path:'encuesta',
+    loadChildren: ()=> import('src/app/Modulos/encuesta/encuesta.module').then(m => m.EncuestaModule),
+    ...canActivate(()=> redirectUnauthorizedTo(['/']))
+  },
+  {
     path:'about-me',
     component:AboutMeComponent
   },

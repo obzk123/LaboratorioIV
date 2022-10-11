@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Carta } from 'src/app/Entidades/carta';
 import { AuthService } from 'src/app/Servicios/AuthService/auth.service';
+import { FirestorageService } from 'src/app/Servicios/FireStorage/firestorage.service';
 
 @Component({
   selector: 'app-mayor-menor',
@@ -17,6 +18,9 @@ export class MayorMenorComponent implements OnInit {
   public puntos:number;
   public imgCarta:string;
 
+  private email:any = '';
+  public highscore = '';
+
   public eleccion:boolean = false;
   public perdio:boolean = false;
 
@@ -24,7 +28,7 @@ export class MayorMenorComponent implements OnInit {
   public randomProximo:number;
   
 
-  constructor(private router:Router, private auth:AuthService) { 
+  constructor(private router:Router, private auth:AuthService, private firestorage:FirestorageService) { 
     this.puntos = 0;
     this.randomActual = 0;
     this.randomProximo = 0;
@@ -33,8 +37,20 @@ export class MayorMenorComponent implements OnInit {
     this.cartaActual = new Carta();
     this.cartaProxima = new Carta();
     this.imgCarta = '';
+    this.obtenerDatosUsuario();
+
   }
 
+  async obtenerDatosUsuario()
+  {
+    this.email = this.auth.GetDataUser()?.email;
+    
+    await this.firestorage.GetHighScore(<string>this.email, 'mayormenor').then(numero=>
+      {
+        
+        this.highscore = JSON.stringify(numero);
+      });
+  }
   ngOnInit(): void {
 
     let cartaAux1 = {numeroDeCarta:1, imagen:"carta1"};
@@ -83,7 +99,7 @@ export class MayorMenorComponent implements OnInit {
     this.CartaImagen();
   }
 
-  Resultado()
+  async Resultado()
   {
     if( ( (this.cartaActual.numeroDeCarta < this.cartaProxima.numeroDeCarta) && this.eleccion) || ( (this.cartaActual.numeroDeCarta > this.cartaProxima.numeroDeCarta) && !this.eleccion))
     {
@@ -93,6 +109,10 @@ export class MayorMenorComponent implements OnInit {
     }
     else
     {
+      if(this.puntos > JSON.parse(this.highscore))
+      {
+        this.firestorage.ModificarHighScore(<string>this.email, this.puntos, 'mayormenor');
+      }
       console.log("Perdiste");
       this.perdio = true;
     }

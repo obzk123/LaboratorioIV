@@ -46,6 +46,11 @@ export class AuthService {
   {
     return signOut(this.auth);
   }
+
+  public GetUID()
+  {
+    return this.auth.currentUser?.uid;
+  }
 }
 
 
