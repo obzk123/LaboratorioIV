@@ -89,21 +89,13 @@
           Games
         </button>
       </li>
-
-      <li>
-        <button href="#" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-          Profile
-        </button>
-      </li>
-
       <li>
         <button routerLink="/encuesta" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
           Encuesta
         </button>
       </li>
-      
+
       <li>
         <button class="nav-link text-white" (click)="this.SignOut()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
@@ -149,24 +141,24 @@
     </div>
   </div>
 
-  <div class="cartas" style="top:480px;">
+  <div class="cartas" style="top:440px;">
     <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Ruleta</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Prueba tu velocidad</text></svg>
     <div class="card-body">
       <p class="card-text">Prueba tu velocidad, haz click sobre el boton antes que desaparezca, la velocidad va incrementando a medida que sumes puntos.</p>
       <div class="d-flex justify-content-between align-items-center">
-        <div style="position: absolute; top:370px;">
+        <div style="position: absolute; top:360px;">
           <button type="button" class="btn btn-sm btn-outline-secondary" routerLink="/juegos/velocidad">Play</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="cartas" style="left: 1150px; top:480px">
+  <div class="cartas" style="left: 1150px; top:440px">
     <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Preguntados</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Preguntados</text></svg>
     <div class="card-body">
       <p class="card-text">Gira la ruleta y dependiendo la categoria tendras que responder.</p>
       <div class="d-flex justify-content-between align-items-center">
-        <div style="position: absolute; top:370px;">
+        <div style="position: absolute; top:360px;">
           <button type="button" class="btn btn-sm btn-outline-secondary" routerLink="/juegos/preguntados">Play</button>
         </div>
       </div>

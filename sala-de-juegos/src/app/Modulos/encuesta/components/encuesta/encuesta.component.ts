@@ -31,6 +31,16 @@ export class EncuestaComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  SignOut()
+  {
+    this.auth.SignOut()
+    .then((response)=> 
+    {
+      this.router.navigate(['/']);
+    })
+    .catch(error => console.log(error));
+  }
+
   public Enviar(): void 
   {
     if(this.formEncuesta.valid == true)

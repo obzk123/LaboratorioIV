@@ -365,10 +365,7 @@ h4.card-title {
     background-color: transparent;
 }
 
-button, input, optgroup, select, textarea {
-    font-family: Roboto,sans-serif;
-    font-weight: 300;
-}
+
 
 .publisher-btn {
     background-color: transparent;

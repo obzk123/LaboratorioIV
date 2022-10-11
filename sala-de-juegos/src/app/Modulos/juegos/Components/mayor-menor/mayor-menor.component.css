@@ -131,9 +131,9 @@ body {
 
   .ubicacion
   {
-    position:fixed;
-    right: 810px;
-    bottom: 480px;
+    position:absolute;
+    left: 300px;
+    bottom: 250px;
     border: 5px solid #000000;
     background-color: red;
   }
