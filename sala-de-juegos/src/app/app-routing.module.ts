@@ -4,6 +4,7 @@ import { AboutMeComponent } from './Vistas/about-me/about-me.component';
 import { PaginaNoEncontradaComponent } from './Vistas/pagina-no-encontrada/pagina-no-encontrada.component';
 
 import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
+import { AdministradorGuard } from './guards/administrador.guard';
 
 const routes: Routes = [
   {
@@ -15,6 +16,11 @@ const routes: Routes = [
     path:'chat',
     loadChildren: ()=> import('src/app/Modulos/chat/chat.module').then(m=>m.ChatModule),
     ...canActivate(()=> redirectUnauthorizedTo(['/']))
+  },
+  {
+    path:'respuestas-encuestas',
+    loadChildren: ()=> import('src/app/Modulos/respuesta-encuesta/respuesta-encuesta.module').then(m=>m.RespuestaEncuestaModule),
+    canActivate: [AdministradorGuard]
   },
   {
     path:'juegos',

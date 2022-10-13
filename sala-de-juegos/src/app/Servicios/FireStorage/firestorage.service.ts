@@ -20,11 +20,12 @@ export class FirestorageService {
     this.mensajes = Array<Mensaje>();
   }
 
-  async AgregarUsuario(user:string)
+  async AgregarUsuario(user:string, tipoperfil:string)
   {
     const docRef = await addDoc(collection(this.db, "usuarios"),
     {
       usuario: user,
+      perfil: tipoperfil,
       puntajePreguntados:0,
       puntajeMayorMenor:0,
       puntajeAhorcado:0,
@@ -68,6 +69,21 @@ export class FirestorageService {
       juegofavorito: datos['juegofavorito'],
       respuesta: datos['respuesta']
     });
+  }
+
+  async getProfile(email:string)
+  {
+    let tipoUsuario = 'usuario';
+    const querySnapshot = await getDocs(collection(this.db, "usuarios"));
+    querySnapshot.forEach((doc) =>
+    {
+      let profile = doc.data();
+      if(profile['usuario'] == email)
+      {
+        tipoUsuario = profile['perfil'];
+      }
+    })
+    return tipoUsuario;
   }
 
   async GetHighScore(email:string, juego:string)

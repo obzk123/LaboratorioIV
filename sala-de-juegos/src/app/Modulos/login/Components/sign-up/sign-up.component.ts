@@ -37,7 +37,7 @@ export class SignUpComponent implements OnInit {
     this.AuthService.SignUp(this.user.email, this.user.password)
     .then(response=>
       {
-        this.fireStore.AgregarUsuario(this.user.email);
+        this.fireStore.AgregarUsuario(this.user.email, 'usuario');
         this.ChangePage('login/sign-in');
         console.log("Registrado con exito");
       })
