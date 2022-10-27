@@ -1,0 +1,88 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Perfil</title>
+    </head>
+
+    <body>
+        <h1>Perfil</h1>
+        
+        <form [formGroup]="this.formPerfil" (ngSubmit)="this.Modificar()">
+            
+            <label for="nombre">Nombre<br></label>
+            <input type="text" class="form-control" placeholder="Tu nombre" id="nombre" formControlName="nombre">
+            <div *ngIf="this.formPerfil.controls['nombre'].errors?.['required']">El nombre es requerido.</div>
+            <div *ngIf="this.formPerfil.controls['nombre'].errors?.['minlength']">El nombre debe tener como minimo 4 caracteres.</div>
+            <div *ngIf="this.formPerfil.controls['nombre'].errors?.['maxlength']">El nombre debe tener como maximo 12 caracteres.</div>
+            <br>
+
+            <label for="apellido">Apellido<br></label>
+            <input type="text" class="form-control" placeholder="Tu apellido" id="apellido" formControlName="apellido">
+            <div *ngIf="this.formPerfil.controls['apellido'].errors?.['required']">El apellido es requerido.</div>
+            <div *ngIf="this.formPerfil.controls['apellido'].errors?.['minlength']">El apellido debe tener como minimo 4 caracteres.</div>
+            <div *ngIf="this.formPerfil.controls['apellido'].errors?.['maxlength']">El apellido debe tener como maximo 20 caracteres.</div>
+            <br>
+
+            <label for="edad">Edad<br></label>
+            <input type="number" class="form-control" placeholder="Tu edad" id="edad" formControlName="edad">
+            <div *ngIf="this.formPerfil.controls['edad'].errors?.['required']">La edad es requerida.</div>
+            <div *ngIf="this.formPerfil.controls['edad'].errors?.['min']">La edad minima es de 12 años.</div>
+            <div *ngIf="this.formPerfil.controls['edad'].errors?.['max']">La edad maxima es de 99 años.</div>
+            <br>
+
+            <label for="dni">Documento nacional de identidad<br></label>
+            <input type="text" class="form-control" placeholder="Tu dni" id="dni"  formControlName="dni">
+            <div *ngIf="this.formPerfil.controls['dni'].errors?.['required']">El dni es requerido.</div>
+            <div *ngIf="this.formPerfil.controls['dni'].errors?.['minlength']">Formato invalido del dni.</div>
+            <div *ngIf="this.formPerfil.controls['dni'].errors?.['maxlength']">Formato invalido del dni.</div>
+            <br>
+            
+            <label for="email">Correo electronico<br></label>
+            <input type="email" class="form-control" placeholder="ejemplo@gmail.com" id="email" formControlName="email" autocomplete="email">
+            <div *ngIf="this.formPerfil.controls['email'].errors?.['required']">El correo es requerido.</div>
+            <div *ngIf="this.formPerfil.controls['email'].errors?.['email']">No es un correo valido.</div>
+            <br>
+
+            <label for="img">Imagen<br></label>
+            <input type="text" class="form-control" id="img" formControlName="img">
+            <br>
+
+            <label for="password">Contraseña<br></label>
+            <input type="password" class="form-control" placeholder="Tu contraseña" id="password" formControlName="password" autocomplete="current-password">
+            <div *ngIf="this.formPerfil.controls['password'].errors?.['required']">La contraseña es requerida.</div>
+            <div *ngIf="this.formPerfil.controls['password'].errors?.['minlength']">La contraseña debe tener como minimo 6 caracteres.</div>
+            <div *ngIf="this.formPerfil.controls['password'].errors?.['maxlength']">La contraseña debe tener como maximo 12 caracteres.</div>
+
+            <div *ngIf="this.tipoDeUsuario == 'paciente'">
+                <br>
+                <label for="obraSocial">Obra social</label>
+                <input type="text" class="form-control" placeholder="Tu obra social" id="obraSocial" formControlName="obraSocial">
+                <br>
+                <label for="img2">Imagen</label>
+                <br>
+                <input type="text" class="form-control" id="img2" formControlName="img2" style="color: black;">
+            </div>
+
+            <div *ngIf="this.tipoDeUsuario == 'especialista'">
+                <br>
+                <label for="obraSocial">Especialidades</label>
+                <br>
+                <input type="text" placeholder="Ingrese tu especialidad" [(ngModel)]="this.especialidad" name="especialidad" [ngModelOptions]="{standalone: true}">
+                <input type="button" value="+" (click)="this.AgregarEspecialidad()">
+                <br>
+                <ng-container *ngFor="let especialidad of this.usuario['especialidad']">
+                    <label>{{especialidad}}</label>
+                    <input type="button" value="-" (click)="this.BorrarEspecialidad(especialidad)">
+                    <br>
+                </ng-container>
+            </div>
+
+            <br><br>
+            <input class="boton btn-primary" type="submit" value="Modificar">
+        </form>
+    </body>
+
+</html>
+

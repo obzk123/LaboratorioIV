@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HOME</title>
+    </head>
+
+    <body>
+
+        <div *ngIf="this.usuario == null">
+            <label>No iniciste sesion</label>
+            <br>
+            <input type="button" value="Iniciar sesion" [routerLink]="['/login']">
+        </div>
+
+        <div *ngIf="this.usuario != null">
+            <app-dashboard [usuario]="this.usuario" (index)="this.AsignarIndex($event)"></app-dashboard>
+
+            <div *ngIf="this.opcionHome == 'inicio'">
+            </div>
+    
+            <div *ngIf="this.opcionHome == 'mis-turnos'">
+            </div>
+
+            <div *ngIf="this.opcionHome == 'perfil'">
+                <app-perfil [usuario]="this.usuario"></app-perfil>
+            </div>
+    
+            <div *ngIf="this.opcionHome == 'validar-cuentas'">
+                <app-validar-cuenta [usuario]="this.usuario"></app-validar-cuenta>
+            </div>
+
+        </div>
+
+
+
+    </body>
+
+</html>
+
