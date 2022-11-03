@@ -18,10 +18,10 @@ export class RegistrarseComponent implements OnInit {
   public correo:string = '';
   public password:string = '';
   public password2:string = '';
-  public img:string = '';
+  public img:any;
   public tipoUsuario:string = '';
   public obraSocial:string = '';
-  public img2:string = '';
+  public img2:any;
   public especialidades = new Array<string>();
   public especialidad:string = '';
 
@@ -38,7 +38,6 @@ export class RegistrarseComponent implements OnInit {
       dni: new FormControl(this.dni, [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
       correo: new FormControl(this.correo, [Validators.required, Validators.email]),
       password: new FormControl(this.password, [Validators.required, Validators.minLength(6), Validators.maxLength(12)]),
-      img: new FormControl(this.img, [Validators.required])
     });
   }
 
@@ -56,18 +55,15 @@ export class RegistrarseComponent implements OnInit {
       this.cargando = true;
       if(this.tipoUsuario == 'especialista' && this.especialidades.length > 0)
       {
-        let especialista = new Especialista(this.nombre, this.apellido, this.edad, this.dni, this.correo, this.password, this.img);
-        this.especialidades.forEach(especialidad => {
-          especialista.AddEspecialidad(especialidad);
-        });
-
+        let especialista = new Especialista(this.nombre, this.apellido, this.edad, this.dni, this.correo, this.password, this.img, this.especialidades);
         this.authService.SignUp(especialista.email, especialista.password).then(ok =>
           {
-            console.log("Se registro");
+            
             this.fireStorage.AgregarUsuarioEspecialista(especialista).then(ok =>
               {
+                console.log("Se registro");
                 console.log("Se agrego a la db");
-                location.reload();
+                this.cargando = false;
               }).catch(errorDb =>
                 {
                   console.log(errorDb);
@@ -84,11 +80,11 @@ export class RegistrarseComponent implements OnInit {
         let paciente = new Paciente(this.nombre, this.apellido, this.edad, this.dni, this.correo, this.password, this.img, this.obraSocial, this.img2);
         await this.authService.SignUp(paciente.email, paciente.password).then(ok =>
           {
-            console.log("Se registro");
             this.fireStorage.AgregarUsuarioPaciente(paciente).then(ok => 
               {
+                console.log("Se registro");
                 console.log("Se agrego a la DB");
-                location.reload();
+                this.cargando = false;
               }).catch(errorDB => 
                 {
                   console.log(errorDB);
@@ -147,6 +143,17 @@ export class RegistrarseComponent implements OnInit {
       {
         this.especialidades.splice(i, 1);
       }
+    }
+  }
+
+  SubirImagen($event:any, index:number)
+  {
+    if(index == 0)
+    {
+      this.img = $event.target.files[0];
+    }else if(index == 1)
+    {
+      this.img2 = $event.target.files[0];
     }
   }
 }

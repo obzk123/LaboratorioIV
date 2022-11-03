@@ -1,0 +1,16 @@
+<div class="cuerpo">
+    <table>
+        <tr>
+            <th>Paciente</th>
+            <th>Accion</th>
+        </tr>
+
+        <tr *ngFor="let paciente of this.pacientes">
+            <td>{{paciente.nombre + ' ' + paciente.apellido}}</td>
+            <td><input type="button" value="Seleccionar" (click)="this.Seleccionar(paciente)"></td>
+        </tr>
+    </table>
+
+    <input type="button" value="Volver" (click)="this.Volver()">
+</div>
+

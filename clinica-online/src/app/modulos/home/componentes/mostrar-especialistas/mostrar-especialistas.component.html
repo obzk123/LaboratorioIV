@@ -1,0 +1,15 @@
+<div class="cuerpo">
+    <table>
+        <tr>
+            <th>Especialista</th>
+            <th>Accion</th>
+        </tr>
+
+        <tr *ngFor="let especialista of this.especialistas">
+            <td>{{especialista.nombre + ' ' + especialista.apellido}}</td>
+            <td><input type="button" value="Seleccionar" (click)="this.Seleccionar(especialista)"></td>
+        </tr>
+    </table>
+
+    <input type="button" value="Volver" (click)="this.Volver()">
+</div>

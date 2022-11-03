@@ -1,13 +1,14 @@
 export abstract class Usuario {
+    public id:number = 0;
     public nombre:string;
     public apellido:string;
     public edad:number;
     public dni:string;
     public email:string;
     public password:string;
-    public img:string;
+    public img:any;
 
-    constructor(nombre:string, apellido:string, edad:number, dni:string, email:string, password:string, img:string)
+    constructor(nombre:string, apellido:string, edad:number, dni:string, email:string, password:string, img:any)
     {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -16,6 +17,11 @@ export abstract class Usuario {
         this.email = email;
         this.password = password;
         this.img = img;
+    }
+
+    SetID(id:number)
+    {
+        this.id = id;
     }
 
     SetNombre(nuevoNombre:string)
@@ -93,9 +99,9 @@ export abstract class Usuario {
 export class Paciente extends Usuario
 {
     public obraSocial:string;
-    public img2:string;
+    public img2:any;
 
-    constructor(nombre:string, apellido:string, edad:number, dni:string, email:string, password:string, img:string, obraSocial:string, img2:string)
+    constructor(nombre:string, apellido:string, edad:number, dni:string, email:string, password:string, img:any, obraSocial:string, img2:any)
     {
         super(nombre, apellido, edad, dni, email, password, img);
         this.obraSocial = obraSocial;
@@ -127,10 +133,10 @@ export class Especialista extends Usuario
 {
     public especialidad:Array<string>;
     
-    constructor(nombre:string, apellido:string, edad:number, dni:string, email:string, password:string, img:string)
+    constructor(nombre:string, apellido:string, edad:number, dni:string, email:string, password:string, img:any, especialidades:Array<string>)
     {
         super(nombre, apellido, edad, dni, email, password, img);
-        this.especialidad = new Array<string>();
+        this.especialidad = especialidades;
     }
 
     AddEspecialidad(nuevaEspecialidad:string)

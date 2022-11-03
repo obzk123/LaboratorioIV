@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { RECAPTCHA_SETTINGS, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings } from 'ng-recaptcha';
+import { environment } from 'src/environments/environment';
 import { LoginRoutingModule } from './login-routing.module';
 import { IniciarSesionComponent } from './vistas/iniciar-sesion/iniciar-sesion.component';
 import { RegistrarseComponent } from './vistas/registrarse/registrarse.component';
@@ -20,7 +21,17 @@ import { CompartidoModule } from 'src/app/VistasCompartidas/compartido/compartid
     LoginRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    CompartidoModule  
+    CompartidoModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
+  ],
+  providers: [
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: environment.recaptcha.siteKey,
+      } as RecaptchaSettings,
+    },
   ]
 })
 export class LoginModule { }

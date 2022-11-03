@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta turno</title>
+</head>
+<body>
+    <div class="cuerpo">
+        <form (ngSubmit)="this.SolicitarTurno()">
+            <h1>Complete el formulario</h1>
+
+            <label>Especialidad: </label>
+            <input type="text" name="especialidad" [ngModel]="this.especialidad" disabled>
+            <input type="button" value="Seleccionar" (click)="this.mostrarEspecialidades = true">
+            <app-mostrar-especialidades *ngIf="this.mostrarEspecialidades == true" (especialidad)="this.CargarEspecialidad($event)"></app-mostrar-especialidades>
+            <br><br>
+
+            <label>Especialista: </label>
+            <input type="text" name="especialista" [ngModel]="this.especialistaMostrar" disabled>
+            <input type="button" value="Seleccionar" (click)="this.mostrarEspecialistas = true">
+            <app-mostrar-especialistas *ngIf="this.mostrarEspecialistas == true" [especialidad]="this.especialidad" (especialista)="this.CargarEspecialista($event)"></app-mostrar-especialistas>
+
+            <ng-container *ngIf="this.usuarioService.usuario['administrador'] == true">
+                <br><br>
+                <label>Paciente: </label>
+                <input type="text" name="paciente" [ngModel]="this.pacienteMostar" disabled>
+                <input type="button" value="Seleccionar" (click)="this.mostrarPacientes = true">
+                <app-mostrar-pacientes *ngIf="this.mostrarPacientes == true" (paciente)="this.CargarPaciente($event)"></app-mostrar-pacientes>
+            </ng-container>
+
+            <br><br>
+
+            <label>Seleccione el dia: </label>
+            <select #selectList name="dias" (change)="this.CargarHorarios(selectList.value)">
+                <option *ngFor="let dia of this.dias;" [ngValue]="dia">{{dia}}</option>
+            </select>
+
+            <br><br>
+
+            <label>Seleccione el horario: </label>
+            <select #selectList name="horas" [(ngModel)]="this.horaSeleccionada">
+                <option *ngFor="let horas of this.horarios;" [ngValue]="horas">{{horas}}</option>
+            </select>
+
+            <br><br>
+
+            <input type="submit" value="Solicitar turno">
+
+        </form>
+
+
+    </div>
+
+
+</body>
+</html>

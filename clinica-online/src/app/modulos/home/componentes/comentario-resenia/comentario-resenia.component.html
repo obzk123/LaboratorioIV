@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios</title>
+</head>
+<body>
+    <div class="cuerpo">
+
+            <h1 *ngIf="this.opcion == 'comentario'">Comentario</h1>
+            <h1 *ngIf="this.opcion == 'resenia' || this.opcion == 'verResenia' ">Reseña</h1>
+
+            <input *ngIf="this.opcion == 'comentario' || this.opcion == 'resenia'" type="text" [(ngModel)]="this.comentarioresenia" name="comentarioresenia">
+            
+            
+            <textarea *ngIf="this.opcion == 'verResenia' || this.opcion == 'verReseniaComentario' || this.opcion == 'verComentario'" disabled>
+                {{this.comentarioresenia}}
+            </textarea>
+            
+            <br>
+
+            <input *ngIf="this.opcion == 'comentario' || this.opcion == 'resenia'" type="button" value="Confirmar" (click)="this.Confirmar()">
+            <input type="button" value="Volver" (click)="this.Salir(false)">
+    </div>
+</body>
+</html>

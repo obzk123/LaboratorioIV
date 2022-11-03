@@ -1,0 +1,9 @@
+.cuerpo
+{
+    position:absolute;
+    border-style: solid;
+    width: 800px;
+    height: 750px;
+    bottom: 55px;
+    left: 600px;
+}

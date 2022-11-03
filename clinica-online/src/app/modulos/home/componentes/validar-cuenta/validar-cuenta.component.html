@@ -9,7 +9,33 @@
     </head>
 
     <body>
-        validar cuentas works!!
+        
+        <div class="cuerpo">
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Tipo de cuenta</th>
+                    <th>Acciones</th>
+                </tr>
+
+                <ng-container *ngFor="let usuario of this.usuariosServices.usuarios">
+                    <tr>
+                        <ng-container *ngIf="usuario.validado == false || usuario.validado == true">
+                            <td>{{usuario.nombre}}</td>
+                            <td>{{usuario.apellido}}</td>
+                            <td>{{usuario.email}}</td>
+                            <td>Especialista</td>
+                            <td *ngIf="usuario.validado == true"><input type="button" value="Desactivar" (click)="this.ActivarDesactivar(usuario, false)"></td>
+                            <td *ngIf="usuario.validado == false"><input type="button" value="Activar" (click)="this.ActivarDesactivar(usuario, true)"></td>
+                        </ng-container>
+                    </tr>
+                </ng-container>
+
+            </table>
+        </div>
+
     </body>
     
 </html>

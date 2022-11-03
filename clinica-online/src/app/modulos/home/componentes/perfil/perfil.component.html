@@ -46,7 +46,7 @@
             <br>
 
             <label for="img">Imagen<br></label>
-            <input type="text" class="form-control" id="img" formControlName="img">
+            <input type="file" id="img" (change)="this.SubirImagen($event, 0)">
             <br>
 
             <label for="password">Contraseña<br></label>
@@ -62,7 +62,7 @@
                 <br>
                 <label for="img2">Imagen</label>
                 <br>
-                <input type="text" class="form-control" id="img2" formControlName="img2" style="color: black;">
+                <input type="file" id="img2" (change)="this.SubirImagen($event, 1)">
             </div>
 
             <div *ngIf="this.tipoDeUsuario == 'especialista'">
@@ -72,7 +72,7 @@
                 <input type="text" placeholder="Ingrese tu especialidad" [(ngModel)]="this.especialidad" name="especialidad" [ngModelOptions]="{standalone: true}">
                 <input type="button" value="+" (click)="this.AgregarEspecialidad()">
                 <br>
-                <ng-container *ngFor="let especialidad of this.usuario['especialidad']">
+                <ng-container *ngFor="let especialidad of this.usuarioService.usuario['especialidad']">
                     <label>{{especialidad}}</label>
                     <input type="button" value="-" (click)="this.BorrarEspecialidad(especialidad)">
                     <br>
@@ -82,7 +82,15 @@
             <br><br>
             <input class="boton btn-primary" type="submit" value="Modificar">
         </form>
+
+
     </body>
 
+    <ng-container>
+        <input class="boton btn-primary" style="position: fixed; left: 600px; " type="button" value="Horarios" (click)="this.mostrarHorarios = !this.mostrarHorarios">
+        <app-horarios *ngIf="this.mostrarHorarios == true" (eventoSalir)="this.mostrarHorarios = false"></app-horarios>
+    </ng-container>
+    
 </html>
+
 

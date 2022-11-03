@@ -77,8 +77,8 @@
 
             <br>
             <label for="imagen">Imagen</label>
-            <input type="text" class="form-control" placeholder="Ingrese la url de la imagen" id="imagen" [(ngModel)]="this.img" name="imagen" formControlName="img">
-            <div *ngIf="this.formEncuesta.controls['img'].errors?.['required']">La imagen es requerida.<br><br></div>
+            <br>
+            <input type="file" id="imagen" (change)="this.SubirImagen($event, 0)" name="imagen">
 
 
 
@@ -97,7 +97,7 @@
                 <br>
                 <label for="imagen2">Imagen</label>
                 <br>
-                <input type="text" placeholder="Ingrese la url de la imagen" class="form-control" id="imagen2" [(ngModel)]="this.img2" name="imagen2" [ngModelOptions]="{standalone: true}">
+                <input type="file" id="imagen2" (change)="this.SubirImagen($event, 1)" name="imagen2">
             </div>
 
             <div *ngIf="this.tipoUsuario == 'especialista'">

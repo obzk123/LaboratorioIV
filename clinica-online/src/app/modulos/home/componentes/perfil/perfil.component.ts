@@ -1,8 +1,7 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from 'src/app/Servicios/auth.service';
 import { FirestorageService } from 'src/app/Servicios/firestorage.service';
+import { UsuarioService } from 'src/app/Servicios/usuario.service';
 
 @Component({
   selector: 'app-perfil',
@@ -11,14 +10,13 @@ import { FirestorageService } from 'src/app/Servicios/firestorage.service';
 })
 export class PerfilComponent implements OnInit {
 
-  @Input() public usuario:any;
-
   public formPerfil:FormGroup;
   public tipoDeUsuario:string;
   public especialidad:string;
   public especialidades = new Array<string>();
+  public mostrarHorarios:boolean = false;
 
-  constructor(public fireStorage:FirestorageService, private route:Router) { 
+  constructor(private fireStorage:FirestorageService, public usuarioService:UsuarioService) { 
     
     this.especialidad = '';
     this.tipoDeUsuario = '';
@@ -29,7 +27,7 @@ export class PerfilComponent implements OnInit {
       dni: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(8)]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]),
-      img: new FormControl('', [Validators.required])
+      img: new FormControl('', [Validators.required]),
     });
 
   }
@@ -44,10 +42,10 @@ export class PerfilComponent implements OnInit {
   {
     if(this.formPerfil.valid)
     {
-      this.usuario = this.formPerfil.value;
-      this.fireStorage.ModificarUsuario(this.usuario).then(m =>
+      this.fireStorage.ModificarUsuario(this.formPerfil.value).then(m =>
         {
           console.log("Modificado con exito");
+          this.usuarioService.usuario = this.formPerfil.value;
         });
     }
     else
@@ -58,27 +56,25 @@ export class PerfilComponent implements OnInit {
   
   SetearAgregarControles()
   {
-    this.formPerfil.controls['nombre'].setValue(this.usuario['nombre']);
-    this.formPerfil.controls['apellido'].setValue(this.usuario['apellido']);
-    this.formPerfil.controls['edad'].setValue(this.usuario['edad']);
-    this.formPerfil.controls['dni'].setValue(this.usuario['dni']);
-    this.formPerfil.controls['email'].setValue(this.usuario['email']);
-    this.formPerfil.controls['password'].setValue(this.usuario['password']);
-    this.formPerfil.controls['img'].setValue(this.usuario['img']);
+    this.formPerfil.controls['nombre'].setValue(this.usuarioService.usuario['nombre']);
+    this.formPerfil.controls['apellido'].setValue(this.usuarioService.usuario['apellido']);
+    this.formPerfil.controls['edad'].setValue(this.usuarioService.usuario['edad']);
+    this.formPerfil.controls['dni'].setValue(this.usuarioService.usuario['dni']);
+    this.formPerfil.controls['email'].setValue(this.usuarioService.usuario['email']);
+    this.formPerfil.controls['password'].setValue(this.usuarioService.usuario['password']);
 
-    if(this.usuario['especialidad'])
+    if(this.usuarioService.usuario['especialidad'])
     {
       this.tipoDeUsuario = 'especialista';
-      this.especialidades = this.usuario['especialidad'];
+      this.especialidades = this.usuarioService.usuario['especialidad'];
+      this.formPerfil.addControl('especialidad', new FormControl(this.especialidades, Validators.required));
     }
-    else if (this.usuario['obraSocial'])
+    else if (this.usuarioService.usuario['obraSocial'])
     {
       this.tipoDeUsuario = 'paciente';
       this.formPerfil.addControl('obraSocial', new FormControl('', Validators.required));
       this.formPerfil.addControl('img2', new FormControl('', Validators.required));
-      this.formPerfil.controls['obraSocial'].setValue(this.usuario['obraSocial']);
-      this.formPerfil.controls['img2'].setValue(this.usuario['img2']);
-
+      this.formPerfil.controls['obraSocial'].setValue(this.usuarioService.usuario['obraSocial']);
     }
   }
 
@@ -121,6 +117,17 @@ export class PerfilComponent implements OnInit {
       {
         this.especialidades.splice(i, 1);
       }
+    }
+  }
+
+  SubirImagen($event:any, index:number)
+  {
+    if(index == 0)
+    {
+      this.formPerfil.controls['img'].setValue($event.target.files[0]);
+    }else if(index == 1)
+    {
+      this.formPerfil.controls['img2'].setValue($event.target.files[0]);
     }
   }
 

@@ -52,9 +52,11 @@
         </div>
 
         <br>
+        
         <input type="button" value="Iniciar sesion" class="btn btn-block btn-primary" (click)="this.IniciarSesion()">
         <input type="button" value="Registrarme" class="btn btn-block btn-primary" [routerLink]="['/login/registro']">
-        
+        <br><br>
+        <re-captcha id="recaptcha" name="recaptcha" [(ngModel)]="this.token"></re-captcha>
         </form>
         </div>
         </div>

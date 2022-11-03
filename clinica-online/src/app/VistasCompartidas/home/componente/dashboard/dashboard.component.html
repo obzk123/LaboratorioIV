@@ -57,6 +57,12 @@
                     </li>
             
                     <li>
+                        <button (click)="this.Redirigir('alta-turno')">
+                            <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#calendar3"/></svg>Solicitar turno</a>
+                        </button>
+                    </li>
+
+                    <li  *ngIf="this.administrador == false">
                         <button (click)="this.Redirigir('mis-turnos')">
                             <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#calendar3"/></svg>Mis turnos</a>
                         </button>
@@ -69,6 +75,10 @@
                     </li>
 
                     <li *ngIf="this.administrador == true">
+                        <button (click)="this.Redirigir('turnos')">
+                            <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>Turnos</a>
+                        </button>
+
                         <button (click)="this.Redirigir('validar-cuentas')">
                             <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#tools"/></svg>Validar cuentas</a>
                         </button>
@@ -84,9 +94,9 @@
     
                 <hr>
 
-                <div class="dropdown" *ngIf="this.usuario != null">
-                    <img [src]="this.usuario['img']" width="32" height="32" class="rounded-circle me-2">
-                    <strong style="font-size: 20px;">{{this.usuario['nombre'] + ' ' + this.usuario['apellido']}}</strong>
+                <div class="dropdown" *ngIf="this.usuarioService.usuario != null">
+                    <img [src]="this.usuarioService.usuario.img" width="32" height="32" class="rounded-circle me-2">
+                    <strong style="font-size: 20px;">{{this.usuarioService.usuario['nombre'] + ' ' + this.usuarioService.usuario['apellido']}}</strong>
                 </div>
 
             </div>

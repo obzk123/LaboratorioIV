@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut , sendPasswordResetEmail, updatePassword, sendEmailVerification } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut , sendPasswordResetEmail, updatePassword, sendEmailVerification, deleteUser } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,7 @@ export class AuthService {
         }
       });
   }
+
 
   public SignIn(email:string, password:string)
   {

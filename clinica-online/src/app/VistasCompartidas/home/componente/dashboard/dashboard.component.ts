@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/Servicios/auth.service';
-import { FirestorageService } from 'src/app/Servicios/firestorage.service';
+import { StorageService } from 'src/app/Servicios/storage.service';
+import { UsuarioService } from 'src/app/Servicios/usuario.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,14 +10,14 @@ import { FirestorageService } from 'src/app/Servicios/firestorage.service';
 })
 export class DashboardComponent implements OnInit {
 
-  @Input() public usuario:any;
   @Output() public index = new EventEmitter<string>();
   public administrador:boolean = false;
+  public img:any;
 
-  constructor(public auth:AuthService, public route:Router, public fireStorage:FirestorageService) { }
+  constructor(private route:Router, public usuarioService:UsuarioService) { }
 
   ngOnInit(): void {
-    if(this.usuario['administrador'] == true)
+    if(this.usuarioService.usuario['administrador'] == true)
     {
       this.administrador = true;
     }
@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
 
   CerrarSesion()
   {
-    this.auth.SignOut();
+    this.usuarioService.CerrarSesion();
     this.route.navigate(['login']);
   }
 
