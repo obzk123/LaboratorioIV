@@ -14,6 +14,16 @@ export class MisTurnosComponent implements OnInit {
   public volver:boolean = false;
   public opcion:string = '';
   public nuevoEstado:string = '';
+  public turnoSeleccionado:Turnos | any;
+  public cargarHistoriaClinica = false;
+  public filtro:string = '';
+
+
+  public arrayEspecialistas = new Array<string>();
+  public arrayPaciente = new Array<string>();
+  public arrayEspecialidades = new Array<string>();
+  public arrayFechas = new Array<string>();
+  public arrayEstadoTurno= new Array<string>();
 
   constructor(public UsuarioService:UsuarioService, public turnosServicios:TurnosService, private fireStorage:FirestorageService) { 
   }
@@ -29,23 +39,74 @@ export class MisTurnosComponent implements OnInit {
       });
   }
 
-  public EventoVolver(valor:boolean, turno:Turnos)
+  public CambiarValor(event:any, filtro:string)
+  {
+    this.filtro = filtro + '-' + event.target.value;
+  }
+  public EventoVolver(valor:boolean)
   {
     if(valor)
     {
-      this.CambiarEstado(turno, this.nuevoEstado);
+      this.CambiarEstado(this.turnoSeleccionado, this.nuevoEstado);
+      if(this.nuevoEstado == 'realizado')
+      {
+        this.cargarHistoriaClinica = true;
+      }
     }
     this.volver = false;
   }
 
-  public SetComentarioResenia(valor:string, nuevoEstado:string)
+  public SetComentarioResenia(valor:string, nuevoEstado:string, turno:Turnos)
   {
     this.opcion = valor;
     this.volver = true;
+    this.turnoSeleccionado = turno
     this.nuevoEstado = nuevoEstado;
   }
 
   ngOnInit(): void {
+    if(this.UsuarioService.usuario.validado == true) this.CargarArrayTurnos('especialista');
+    else this.CargarArrayTurnos('paciente');
   }
 
+  public CargarArrayTurnos(condicion:string)
+  {
+    if(condicion == 'paciente')
+    {
+      for(let i = 0; i < this.turnosServicios.turnos.length; i++)
+      {
+        if(this.turnosServicios.turnos[i].paciente.id == this.UsuarioService.usuario.id)
+        {
+          this.ValidarDuplicado(this.arrayEspecialidades,  this.turnosServicios.turnos[i].especialidad);
+          this.ValidarDuplicado(this.arrayEspecialistas,  this.turnosServicios.turnos[i].especialista.nombre);
+          this.ValidarDuplicado(this.arrayEstadoTurno,  this.turnosServicios.turnos[i].estadoTurno);
+          this.ValidarDuplicado(this.arrayFechas, this.turnosServicios.turnos[i].fecha);
+        }
+      }
+    }else
+    {
+      for(let i = 0; i < this.turnosServicios.turnos.length; i++)
+      {
+        if(this.turnosServicios.turnos[i].especialista.id == this.UsuarioService.usuario.id)
+        {
+          this.ValidarDuplicado(this.arrayEspecialidades,  this.turnosServicios.turnos[i].especialidad);
+          this.ValidarDuplicado(this.arrayPaciente,  this.turnosServicios.turnos[i].paciente.nombre);
+          this.ValidarDuplicado(this.arrayEstadoTurno,  this.turnosServicios.turnos[i].estadoTurno);
+          this.ValidarDuplicado(this.arrayFechas, this.turnosServicios.turnos[i].fecha);
+        }
+      }
+    }
+  }
+
+  ValidarDuplicado(array:Array<string>, valor:any)
+  {
+    for(let i = 0; i < array.length; i++)
+    {
+      if(array[i] == valor)
+      {
+        return;
+      }
+    }
+    array.push(valor);
+  }
 }

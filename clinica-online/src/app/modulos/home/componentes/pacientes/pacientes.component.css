@@ -1,0 +1,18 @@
+.cuerpo
+{
+    position: fixed;
+    border-style: solid;
+    width: 800px;
+    height: 400px;
+    bottom: 250px;
+    left: 600px;
+}
+.boton
+{
+    border-radius: 15px;
+}
+
+.boton:hover
+{
+    color: red;
+}

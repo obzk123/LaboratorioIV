@@ -24,7 +24,9 @@ export class RegistrarseComponent implements OnInit {
   public img2:any;
   public especialidades = new Array<string>();
   public especialidad:string = '';
+  public token:string|undefined;
 
+  public mostrarEspecialidades:boolean = false;
   public cargando:boolean = false;
   public formEncuesta:FormGroup;
 
@@ -50,6 +52,11 @@ export class RegistrarseComponent implements OnInit {
 
   async Registrarme()
   {
+    if(this.token == undefined)
+    {
+      console.log("Falta el captcha");
+      return;
+    }
     if(this.formEncuesta.valid == true)
     {
       this.cargando = true;
@@ -103,11 +110,11 @@ export class RegistrarseComponent implements OnInit {
     } 
   }
 
-  EspecialidadUnica()
+  EspecialidadUnica(valor:string)
   {
     for(let i = 0; i < this.especialidades.length; i++)
     {
-      if(this.especialidades[i].toLowerCase() == this.especialidad.toLowerCase())
+      if(this.especialidades[i].toLowerCase() == valor.toLowerCase())
       {
         return false;
       }
@@ -115,24 +122,19 @@ export class RegistrarseComponent implements OnInit {
     return true;
   }
 
-  AgregarEspecialidad()
+  AgregarEspecialidad(valor:string)
   {
-    if(this.especialidad != '')
+    if(valor != '')
     {
-      if(this.EspecialidadUnica())
+      if(this.EspecialidadUnica(valor))
       {
-        this.especialidades.push(this.especialidad);
-        this.especialidad = '';
+        this.especialidades.push(valor);
       }else
       {
         console.log("Especialidad ya existente");
       }
-      
-    }else
-    {
-      console.log("No puede dejar vacio el campo especialidad al momento de agregar");
     }
-    
+    this.mostrarEspecialidades = false;
   }
 
   BorrarEspecialidad(valor:string)

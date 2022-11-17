@@ -10,7 +10,7 @@
 
 
     <title>Registro</title>
-    <body>
+    <body class="slide-in-right">
 
        <div *ngIf="this.cargando == true" class="background-loading">
             <div  class="loading">
@@ -104,11 +104,9 @@
                 <br>
                 <label>Tipo Especialista</label>
                 <br><br>
-                <label for="especialidad">Elegi tu especialidad</label>
-                <div>
-                    <input type="text" class="form-control" placeholder="Tu especialidad" id="especialidad" [(ngModel)]="this.especialidad" name="especialidad" [ngModelOptions]="{standalone: true}">
-                    <input type="button" value="+" (click)="this.AgregarEspecialidad()">
-                </div>
+                <label for="especialidad">Elegi tu especialidad: </label>
+
+                <app-mostrar-especialidades *ngIf="this.mostrarEspecialidades == true" (especialidad)="this.AgregarEspecialidad($event)" ></app-mostrar-especialidades>
 
                 <div *ngFor="let especialidad of this.especialidades">
                     <label>{{especialidad}}</label>
@@ -120,7 +118,11 @@
 
         <input type="button" value="Registrarme" class="btn btn-block btn-primary" (click)="this.Registrarme()">
         <input type="button" value="Logearme" class="btn btn-block btn-primary" [routerLink]="['/login/iniciar-sesion']">
-        
+
+        <br><br>
+
+        <re-captcha id="recaptcha" name="recaptcha" [(ngModel)]="this.token"></re-captcha>
+
         </form>
         
     </div>

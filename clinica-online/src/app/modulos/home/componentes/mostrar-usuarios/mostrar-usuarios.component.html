@@ -1,0 +1,13 @@
+<div class="cuerpo">
+    <input type="text" [(ngModel)]="this.nombreBuscar">
+    <br><br>
+    <button *ngFor="let usuario of (this.usuarios.usuarios | filtroNombre:this.nombreBuscar)" (click)="this.Seleccionar(usuario)" style="width: 80px; height: 100px;">
+        
+        <img [src]="usuario.img">
+        <br>
+        <label>{{usuario.nombre + ' ' + usuario.apellido}}</label>
+    </button>
+
+    <br><br>
+    <input type="button" value="Volver" (click)="this.Volver()">
+</div>

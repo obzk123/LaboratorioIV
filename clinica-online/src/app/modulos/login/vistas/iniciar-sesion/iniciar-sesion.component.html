@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 </head>
     <title>Inicio de sesion</title>
-    <body>
+    <body class="slide-in-right">
         <div *ngIf="this.cargando == true" class="background-loading">
             <div  class="loading">
                 <app-loading ></app-loading>
@@ -37,18 +37,14 @@
         </div>
         
         <div class="botones-acesso-rapido">
-            <input type="button" value="Paciente 1" (click)="this.SetEmailPassword('octavio_carp@yahoo.com.ar', '123456')">
-            <br>
-            <input type="button" value="Paciente 2" (click)="this.SetEmailPassword('octavio_bill@yahoo.com.ar', '123456')">
-            <br>
-            <input type="button" value="Paciente 3" (click)="this.SetEmailPassword('margilando47@hotmail.com', '123456')">
-            <br>
-            <input type="button" value="Especialista 1" (click)="this.SetEmailPassword('octaviobzk123@gmail.com', '123456')">
-            <br>
-            <input type="button" value="Especialista 2" (click)="this.SetEmailPassword('cielomar19@yahoo.com.ar', '123456')">
-            <br>
-            <input type="button" value="Administrador" (click)="this.SetEmailPassword('octavio_bill@hotmail.com', '123456')">
-            <br>
+            
+            <input type="image" value="Paciente 3" (click)="this.SetEmailPassword('eggaxlotckgariacqx@tmmcv.net', '123456')" style="height: 64px; width:64px;" src="https://firebasestorage.googleapis.com/v0/b/clinica-online-c4792.appspot.com/o/images%2FpacienteHombre.png?alt=media&token=6c9bcced-8ade-4289-943b-1cff0a9c6e3b">
+            <input type="image" value="Paciente 1" (click)="this.SetEmailPassword('radaqfankdpbbgorwd@tmmbt.com', '123456')" style="height: 64px; width:64px;" src="https://firebasestorage.googleapis.com/v0/b/clinica-online-c4792.appspot.com/o/images%2FpacienteMujer.png?alt=media&token=1c8e8198-2c27-4b7c-a749-fc3af3cee055">
+            <input type="image" value="Paciente 2" (click)="this.SetEmailPassword('octavio_bill@hotmail.com', '123456')" style="height: 64px; width:64px;" src="https://firebasestorage.googleapis.com/v0/b/clinica-online-c4792.appspot.com/o/images%2FpacienteHombre2.png?alt=media&token=a27e2dc9-649e-4b3f-85ac-f6407c5eb40b">
+
+            <input type="image" value="Especialista 2" (click)="this.SetEmailPassword('cgpyhjzsosywdfwptk@tmmbt.net', '123456')" style="height: 64px; width:64px;" src="https://firebasestorage.googleapis.com/v0/b/clinica-online-c4792.appspot.com/o/images%2Fdoctor.png?alt=media&token=0fcd4407-a7a4-4da3-ab0f-c859ca280159">
+            <input type="image" value="Especialista 1" (click)="this.SetEmailPassword('egzpsqjgsybcvulrny@tmmwj.net', '123456')" style="height: 64px; width:64px;" src="https://firebasestorage.googleapis.com/v0/b/clinica-online-c4792.appspot.com/o/images%2Fdoctora.png?alt=media&token=b90a1c2a-60e6-4c82-9415-d5807fe5084d">
+            <input type="image" value="Administrador" (click)="this.SetEmailPassword('octaviobzk123@gmail.com', '123456')" style="height: 64px; width:64px;" src="https://firebasestorage.googleapis.com/v0/b/clinica-online-c4792.appspot.com/o/images%2Fadministrador.png?alt=media&token=87aba5f1-b50b-4bf3-9576-cddd21572546">
         </div>
 
         <br>
@@ -56,7 +52,7 @@
         <input type="button" value="Iniciar sesion" class="btn btn-block btn-primary" (click)="this.IniciarSesion()">
         <input type="button" value="Registrarme" class="btn btn-block btn-primary" [routerLink]="['/login/registro']">
         <br><br>
-        <re-captcha id="recaptcha" name="recaptcha" [(ngModel)]="this.token"></re-captcha>
+        
         </form>
         </div>
         </div>

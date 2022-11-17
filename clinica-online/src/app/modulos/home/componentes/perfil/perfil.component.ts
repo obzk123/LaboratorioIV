@@ -1,6 +1,8 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { HistoriaClinica } from 'src/app/Entidades/historia-clinica';
 import { FirestorageService } from 'src/app/Servicios/firestorage.service';
+import { PdfService } from 'src/app/Servicios/pdf.service';
 import { UsuarioService } from 'src/app/Servicios/usuario.service';
 
 @Component({
@@ -15,8 +17,10 @@ export class PerfilComponent implements OnInit {
   public especialidad:string;
   public especialidades = new Array<string>();
   public mostrarHorarios:boolean = false;
+  public mostrarEspecialidades:boolean = false;
+  public mostrarHistoriaClinica:boolean = false;
 
-  constructor(private fireStorage:FirestorageService, public usuarioService:UsuarioService) { 
+  constructor(private fireStorage:FirestorageService, public usuarioService:UsuarioService, private pdfservices:PdfService) { 
     
     this.especialidad = '';
     this.tipoDeUsuario = '';
@@ -37,6 +41,21 @@ export class PerfilComponent implements OnInit {
     this.SetearAgregarControles();
   }
 
+
+  public DescargarPDF()
+  {
+    this.fireStorage.GetHistoriaClinica(this.usuarioService.usuario.id).then( (historia:HistoriaClinica | undefined) =>
+      {
+        if(historia != undefined)
+        {
+          this.pdfservices.CrearPDFHistoriaClinica(this.usuarioService.usuario, historia);
+        }else
+        {
+          console.log("No tienes historia clinica");
+        }
+      })
+    
+  }
 
   Modificar()
   {
@@ -78,11 +97,11 @@ export class PerfilComponent implements OnInit {
     }
   }
 
-  EspecialidadUnica()
+  EspecialidadUnica(valor:string)
   {
     for(let i = 0; i < this.especialidades.length; i++)
     {
-      if(this.especialidades[i].toLowerCase() == this.especialidad.toLowerCase())
+      if(this.especialidades[i].toLowerCase() == valor.toLowerCase())
       {
         return false;
       }
@@ -90,14 +109,13 @@ export class PerfilComponent implements OnInit {
     return true;
   }
 
-  AgregarEspecialidad()
+  AgregarEspecialidad(valor:string)
   {
-    if(this.especialidad != '')
+    if(valor != '')
     {
-      if(this.EspecialidadUnica())
+      if(this.EspecialidadUnica(valor))
       {
-        this.especialidades.push(this.especialidad);
-        this.especialidad = '';
+        this.especialidades.push(valor);
       }else
       {
         console.log("Especialidad ya existente");
@@ -107,6 +125,7 @@ export class PerfilComponent implements OnInit {
     {
       console.log("No puede dejar vacio el campo especialidad al momento de agregar");
     }
+    this.mostrarEspecialidades = false;
   }
 
   BorrarEspecialidad(valor:string)

@@ -1,16 +1,14 @@
 <div class="cuerpo">
-    <table>
-        <tr>
-            <th>Paciente</th>
-            <th>Accion</th>
-        </tr>
-
-        <tr *ngFor="let paciente of this.pacientes">
-            <td>{{paciente.nombre + ' ' + paciente.apellido}}</td>
-            <td><input type="button" value="Seleccionar" (click)="this.Seleccionar(paciente)"></td>
-        </tr>
-    </table>
-
-    <input type="button" value="Volver" (click)="this.Volver()">
+    <br><br>
+    <button *ngFor="let paciente of this.pacientes" (click)="this.Seleccionar(paciente)" class="boton">
+        <img [src]="paciente.img">
+        <br>
+        <hr>
+        <label>{{paciente.nombre + ' ' + paciente.apellido}}</label>
+    </button>
+    <br><br>
+    <input type="button" value="Volver" (click)="this.Volver()" *ngIf="this.opcion != 'historias-clinicas'">
+    <input type="button" value="Descargar excel" (click)="this.Descargar()" *ngIf="this.opcion == 'historias-clinicas'">
+    <app-cargar-historia-clinica *ngIf="this.mostrarHistoriaClinica == true" [paciente]="this.pacienteSeleccionado" [opcion]="'soloVer'" (volver)="this.mostrarHistoriaClinica = false"></app-cargar-historia-clinica>
 </div>
 

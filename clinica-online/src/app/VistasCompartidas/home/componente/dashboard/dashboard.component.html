@@ -56,9 +56,15 @@
                         </button>
                     </li>
             
-                    <li>
+                    <li *ngIf="this.especialista == false || this.administrador == true">
                         <button (click)="this.Redirigir('alta-turno')">
                             <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#calendar3"/></svg>Solicitar turno</a>
+                        </button>
+                    </li>
+
+                    <li *ngIf="this.especialista == true">
+                        <button (click)="this.Redirigir('pacientes')">
+                            <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#calendar3"/></svg>Pacientes</a>
                         </button>
                     </li>
 
@@ -77,6 +83,14 @@
                     <li *ngIf="this.administrador == true">
                         <button (click)="this.Redirigir('turnos')">
                             <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>Turnos</a>
+                        </button>
+
+                        <button (click)="this.Redirigir('usuarios')">
+                            <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>Usuarios</a>
+                        </button>
+
+                        <button (click)="this.Redirigir('estadisticas')">
+                            <a><svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>Estadisticas</a>
                         </button>
 
                         <button (click)="this.Redirigir('validar-cuentas')">

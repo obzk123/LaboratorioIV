@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Especialidades } from 'src/app/Entidades/especialidades';
+import { EspecialidadesService } from 'src/app/Servicios/especialidades.service';
 import { UsuariosService } from 'src/app/Servicios/usuarios.service';
 
 @Component({
@@ -8,45 +10,13 @@ import { UsuariosService } from 'src/app/Servicios/usuarios.service';
 })
 export class MostrarEspecialidadesComponent implements OnInit {
 
-  public especialidades = new Array<string>();
-
   @Output() especialidad = new EventEmitter<string>();
 
-  constructor(public usuariosService:UsuariosService) { 
-    this.CargarEspecialidades();
-    console.log(this.especialidades);
+  constructor(public usuariosService:UsuariosService, public EspecialidadesServices:EspecialidadesService) { 
+    this.EspecialidadesServices.CargarEspecialidades();
   }
 
   ngOnInit(): void {
-  }
-
-  public CargarEspecialidades()
-  {
-    for(let i = 0; i < this.usuariosService.usuarios.length; i++)
-    {
-      let user = this.usuariosService.usuarios[i];
-      if(user['especialidad'])
-      {
-        for(let j = 0; j < user['especialidad'].length; j++)
-        {
-          if(j == 0)
-          {
-            this.especialidades.push(user['especialidad'][j]);
-          }
-
-          for(let k = 0; k < this.especialidades.length; k++)
-          {
-            if(this.especialidades[k] == user['especialidad'][j])
-            {
-              break;
-            }else if(k == this.especialidades.length -1)
-            {
-              this.especialidades.push(user['especialidad'][j]);
-            }
-          }
-        }
-      }
-    }
   }
 
   public Seleccionar(valor:string)

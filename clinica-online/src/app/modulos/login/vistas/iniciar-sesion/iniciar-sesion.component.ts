@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/Servicios/auth.service';
 import { FirestorageService } from 'src/app/Servicios/firestorage.service';
-import { StorageService } from 'src/app/Servicios/storage.service';
 import { UsuarioService } from 'src/app/Servicios/usuario.service';
 
 @Component({
@@ -10,15 +9,14 @@ import { UsuarioService } from 'src/app/Servicios/usuario.service';
   templateUrl: './iniciar-sesion.component.html',
   styleUrls: ['./iniciar-sesion.component.css']
 })
+
 export class IniciarSesionComponent implements OnInit {
 
   public email:string;
   public password:string;
   public cargando:boolean;
-  public token:string|undefined;
 
-  constructor(private auth:AuthService, private fireStorage:FirestorageService, public router:Router, private usuarioService:UsuarioService, private storage:StorageService) { 
-    this.token = undefined;
+  constructor(private auth:AuthService, private fireStorage:FirestorageService, public router:Router, private usuarioService:UsuarioService) { 
     this.email = '';
     this.password = '';
     this.cargando = false;
@@ -29,11 +27,6 @@ export class IniciarSesionComponent implements OnInit {
 
   IniciarSesion()
   {
-    if(this.token == undefined)
-    {
-      console.log("Falta el captcha");
-      return;
-    }
     this.cargando = true;
     this.auth.SignIn(this.email, this.password).then(ok =>
     {
@@ -51,6 +44,7 @@ export class IniciarSesionComponent implements OnInit {
               }
               else
               {
+                //this.fireStorage.CrearLog(m['id']);
                 this.usuarioService.usuario = m;
                 this.router.navigate(['home']);
                 console.log("Logueado con exito");

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta historia clinica</title>
+</head>
+<body>
+    <div class="cuerpo">
+        <form [formGroup]="this.formHistoriaClinica" (ngSubmit)="this.CargarHistoria()">
+            <label for="nombre">Nombre paciente<br></label>
+            <input type="text" class="form-control" id="nombre" formControlName="paciente">
+            <br>
+
+            <label for="altura">Altura<br></label>
+            <input type="text" class="form-control" id="altura" formControlName="altura">
+            <br>
+
+            <label for="peso">Peso<br></label>
+            <input type="number" class="form-control" id="peso" formControlName="peso">
+            <br>
+
+            <label for="temperatura">Temperatura<br></label>
+            <input type="number" class="form-control" id="temperatura" formControlName="temperatura">
+            <br>
+
+            <label for="presion">Presion<br></label>
+            <input type="number" class="form-control" id="presion" formControlName="presion">
+            <br>
+
+            <label for="datosExtras">Datos extras<br></label>
+            <textarea class="form-control" id="datosExtras" formControlName="datosExtras"></textarea>
+            <br>
+
+            <input type="submit" value="Cargar historia" *ngIf="this.opcion != 'soloVer'">
+            <input type="submit" value="Descargar turnos del paciente" (click)="this.DescargarTurnos()" *ngIf="this.opcion != 'soloCarga'">
+            <input type="button" value="Volver" (click)="this.Volver()" *ngIf="this.opcion != 'soloCarga'">
+        </form>
+    </div>
+</body>
+</html>

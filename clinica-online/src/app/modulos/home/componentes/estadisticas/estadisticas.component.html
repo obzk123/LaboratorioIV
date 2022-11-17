@@ -1,0 +1,47 @@
+<div class="cuerpo">
+    <input type="button" value="Turnos por especialidad" (click)="this.turnosPorEspecialidad()">
+    <input type="button" value="Turnos por dia" (click)="this.cantidadTurnosPorDia()">
+    <input type="button" value="Turnos solicitados en un lapso de tiempo" (click)="this.SetearOpcion(0)">
+    <input type="button" value="Turnos finalizados en un lapso de tiempo" (click)="this.SetearOpcion(1)"> 
+    <input type="button" value="Mostrar logs de un usuario" (click)="this.MostrarUsuario()"> 
+
+    <div *ngIf="this.opcion != -1">
+        <br>
+        <label>Fecha inicial</label>
+        <input type="date" [ngModel]="this.fechaInicial" (ngModelChange)="this.ActualizarFecha($event, 'inicial')" #fechaInicial name="fechaInicial">
+        <br><br>
+        <label>Fecha Maxima</label>
+        <input type="date" [ngModel]="this.fechaMaxima" (ngModelChange)="this.ActualizarFecha($event, 'maxima')" #fechaMaxima  name="fechaMaxima">
+    
+        <br>
+        <input type="button" value="Confirmar" (click)="this.Confirmar()">
+        <input type="button" value="Cerrar" (click)="this.SetearOpcion(-1)">
+    </div>
+
+    <app-mostrar-usuarios *ngIf="this.mostrarUsuario == true" (eventoSalir)="this.MostrarLogUsuarios($event)"></app-mostrar-usuarios>
+
+
+    <table *ngIf="this.logsDeUnUsuario.length != 0">
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Fecha</th>
+            <th>Dia</th>
+        </tr>
+
+        <tr *ngFor="let usuarioLog of this.logsDeUnUsuario">
+            <td>{{this.usuario.nombre}}</td>
+            <td>{{this.usuario.apellido}}</td>
+            <td>{{this.usuarioLog.fecha}}</td>
+            <td>{{this.usuarioLog.hora}}</td>
+        </tr>
+
+        <input type="button" value="Descargar PDF" (click)="this.Descargar('pdf')">
+    </table>
+
+
+    <div>
+        <canvas  id="chart" >{{ this.chart }}</canvas>
+        <input *ngIf="this.chart" type="button" value="Descargar Excel" (click)="this.Descargar('excel')">
+    </div>
+</div>

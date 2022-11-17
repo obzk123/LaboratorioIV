@@ -73,6 +73,7 @@ export class HorariosComponent implements OnInit {
   {
     this.fireStorage.ObtenerHorarioPorID(this.usuarioService.usuario.id).then( (horarios:Horarios | any) =>
       {
+        console.log(horarios);
           if(horarios)
           {
             this.horarios = horarios;
@@ -108,9 +109,16 @@ export class HorariosComponent implements OnInit {
                 }
               }
 
-              let valor = arrayHorarios[aux].split('-');
-              let valorInicio = valor[0].split(':');
-              let valorFin = valor[1].split(':');
+              let valor = new Array<string>();
+              let valorInicio = new Array<string>();
+              let valorFin = new Array<string>();
+
+              if(arrayHorarios[aux] != '')
+              {
+                valor = arrayHorarios[aux].split('-');
+                valorInicio = valor[0].split(':');
+                valorFin = valor[1].split(':');
+              }
 
               if(agregado == 'Inicio')
               {
@@ -125,7 +133,6 @@ export class HorariosComponent implements OnInit {
               {
                 this.formHorarios.controls[this.dias[aux] + agregado].setValue(valorFin[1]);
               }
-
               aux++;
             }
           }
@@ -134,21 +141,36 @@ export class HorariosComponent implements OnInit {
 
   public Confirmar()
   {
-    if(this.formHorarios.valid && this.VerificarHoras())
+    if(this.formHorarios.valid)
     {
-      this.horarios.lunes =       this.formHorarios.controls['LunesInicio'].value + ':' + this.formHorarios.controls['LunesInicioMinutos'].value;
-      this.horarios.martes  =     this.formHorarios.controls['MartesInicio'].value + ':' + this.formHorarios.controls['MartesInicioMinutos'].value;
-      this.horarios.miercoles =   this.formHorarios.controls['MiercolesInicio'].value + ':' + this.formHorarios.controls['MiercolesInicioMinutos'].value;
-      this.horarios.jueves =      this.formHorarios.controls['JuevesInicio'].value + ':' + this.formHorarios.controls['JuevesInicioMinutos'].value;
-      this.horarios.viernes =     this.formHorarios.controls['ViernesInicio'].value + ':' + this.formHorarios.controls['ViernesInicioMinutos'].value;
-      this.horarios.sabado =      this.formHorarios.controls['SabadoInicio'].value + ':' + this.formHorarios.controls['SabadoInicioMinutos'].value;
+      let controls = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+      let valores = [this.horarios.lunes, this.horarios.martes, this.horarios.miercoles, this.horarios.jueves, this.horarios.viernes, this.horarios.sabado];
+      
+      for(let i = 0; i < 6; i++)
+      {
+        if(this.formHorarios.controls[controls[i] + 'Inicio'].enabled)
+        {
+          let valorInicio = this.formHorarios.controls[controls[i] + 'InicioMinutos'].value;
+          let valorFin = this.formHorarios.controls[controls[i] + 'FinMinutos'].value;
+          if(valorInicio.toString().length < 2)
+          {
+            valorInicio = '0' + valorInicio;
+          }
 
-      this.horarios.lunes +=      '-' + this.formHorarios.controls['LunesFin'].value + ':' + this.formHorarios.controls['LunesFinMinutos'].value;
-      this.horarios.martes  +=    '-' + this.formHorarios.controls['MartesFin'].value + ':' + this.formHorarios.controls['MartesFinMinutos'].value;
-      this.horarios.miercoles +=  '-' + this.formHorarios.controls['MiercolesFin'].value + ':' + this.formHorarios.controls['MiercolesFinMinutos'].value;
-      this.horarios.jueves +=     '-' + this.formHorarios.controls['JuevesFin'].value + ':' + this.formHorarios.controls['JuevesFinMinutos'].value;
-      this.horarios.viernes +=    '-' + this.formHorarios.controls['ViernesFin'].value + ':' + this.formHorarios.controls['ViernesFinMinutos'].value;
-      this.horarios.sabado +=     '-' + this.formHorarios.controls['SabadoFin'].value + ':' + this.formHorarios.controls['SabadoFinMinutos'].value;
+          if(valorFin.toString().length < 2)
+          {
+            valorFin = '0' + valorFin;
+          }
+          valores[i] = this.formHorarios.controls[controls[i] + 'Inicio'].value + ':' + valorInicio + '-' + this.formHorarios.controls[controls[i] + 'Fin'].value + ':' + valorFin;
+        }
+      }
+     
+      this.horarios.lunes = valores[0];
+      this.horarios.martes = valores[1];
+      this.horarios.miercoles = valores[2];
+      this.horarios.jueves = valores[3];
+      this.horarios.viernes = valores[4];
+      this.horarios.sabado = valores[5];
 
       this.fireStorage.GuardarHorarios(this.usuarioService.usuario.id, this.horarios).then(ok =>
         {

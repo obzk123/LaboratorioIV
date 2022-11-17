@@ -7,3 +7,19 @@
     bottom: 250px;
     left: 600px;
 }
+
+.boton
+{
+    width: 80px; 
+    height: 120px; 
+    margin-left: 10px; 
+    border-radius: 10px; 
+    border: none;
+}
+
+.boton:hover
+{
+    width: 100px; 
+    height: 140px; 
+    border-radius: 10px solid; 
+}

@@ -8,11 +8,35 @@
 </head>
 <body>
     <div class="cuerpo">
-        <p>Aca se muestran todos los turnos</p>
-            <input type="button" value="Nuevo turno">
+        <label>Filtros: </label>
+
+        <select id="filtroEspecialista" name="filtroEspecialista" (change)="this.CambiarValor($event, 'especialista')">
+            <option *ngFor="let valor of this.arrayEspecialistas">{{valor}}</option>
+        </select>
+
+        <select id="filtroPaciente" name="filtroPaciente" (change)="this.CambiarValor($event, 'paciente')">
+            <option *ngFor="let valor of this.arrayPaciente">{{valor}}</option>
+        </select>
+
+        <select id="filtroEspecialidad" name="filtroEspecialidad" (change)="this.CambiarValor($event, 'especialidad')">
+            <option *ngFor="let valor of this.arrayEspecialidades">{{valor}}</option>
+        </select>
+
+        <select id="filtroFecha"  name="filtroFecha" (change)="this.CambiarValor($event, 'fecha')">
+            <option *ngFor="let valor of this.arrayFechas">{{valor}}</option>
+        </select>
+
+        <select id="filtroEstado" name="filtroEstado" (change)="this.CambiarValor($event, 'estado')">
+            <option *ngFor="let valor of this.arrayEstadoTurno">{{valor}}</option>
+        </select>
+        
+        <input type="button" value="Resetar filtro" (click)="this.filtro = ''">
+
             <table>
                 <tr>
+                    <th>Foto del especialista</th>
                     <th>Especialista</th>
+                    <th>Foto del paciente</th>
                     <th>Paciente</th>
                     <th>Especialidad</th>
                     <th>Fecha</th>
@@ -20,17 +44,21 @@
                     <th>Acciones</th>
                 </tr>
 
-                <ng-container *ngFor="let turno of this.turnosServicios.turnos">
+                <ng-container *ngFor="let turno of (this.turnosServicios.turnos | pipeEspecialidad: this.filtro)">
                     <tr>
-                        <td>{{turno.especialista.GetNombre() + ' ' + turno.especialista.GetApellido()}}</td>
-                        <td>{{turno.paciente.GetNombre() + ' ' + turno.paciente.GetApellido()}}</td>
+                        <td><img [src]="turno.especialista.img"></td>
+                        <td>{{turno.especialista.nombre + ' ' + turno.especialista.apellido}}</td>
+                        <td><img [src]="turno.paciente.img"></td>
+                        <td>{{turno.paciente.nombre + ' ' + turno.paciente.apellido}}</td>
                         <td>{{turno.especialidad}}</td>
-                        <td>{{turno.fecha}}</td>
+                        <td>{{turno.fecha + ' ' + turno.hora + ' hs'}}</td>
                         <td>{{turno.estadoTurno}}</td>
-                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'aceptado' && turno.estadoTurno != 'cancelado'"><input type="button" value="Cancelar turno" (click)="this.cancelado = true"></td>
-                        <app-comentario-resenia *ngIf="this.cancelado == true" [turno]="turno" [opcion]="'comentario'" (eventoSalir)="this.EventoVolver($event, turno)"></app-comentario-resenia>
+                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'aceptado' && turno.estadoTurno != 'cancelado'"><input type="button" value="Cancelar turno" (click)="this.SetearTurno(turno)"></td>
                     </tr>
                 </ng-container>
+
+                <app-comentario-resenia *ngIf="this.cancelado == true" [turno]="this.turnoSeleccionado" [opcion]="'comentario'" (eventoSalir)="this.EventoVolver($event)"></app-comentario-resenia>
+
 
                
             </table>

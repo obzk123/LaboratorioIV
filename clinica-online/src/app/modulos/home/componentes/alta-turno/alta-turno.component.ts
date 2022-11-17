@@ -1,11 +1,11 @@
 import { Component, OnInit} from '@angular/core';
 import { Horarios } from 'src/app/Entidades/horarios';
+import { Turnos } from 'src/app/Entidades/turnos';
 import { Especialista, Paciente } from 'src/app/Entidades/usuario';
 import { FirestorageService } from 'src/app/Servicios/firestorage.service';
 import { HorariosServicesService } from 'src/app/Servicios/horarios-services.service';
 import { TurnosService } from 'src/app/Servicios/turnos.service';
 import { UsuarioService } from 'src/app/Servicios/usuario.service';
-import { UsuariosService } from 'src/app/Servicios/usuarios.service';
 
 @Component({
   selector: 'app-alta-turno',
@@ -14,11 +14,13 @@ import { UsuariosService } from 'src/app/Servicios/usuarios.service';
 })
 export class AltaTurnoComponent implements OnInit {
 
-  public paciente:any;
-  public especialista:any;
+  private paciente:Paciente | undefined;
+  private especialista:Especialista | undefined;
 
   public especialistaMostrar:string;
-  public pacienteMostar:string;
+  public pacienteMostrar:string;
+
+  public administrador:boolean = false;
 
   public especialidad:string;
 
@@ -26,18 +28,17 @@ export class AltaTurnoComponent implements OnInit {
   public mostrarEspecialistas:boolean = false;
   public mostrarPacientes:boolean = false;
 
-  public fechaSeleccionada:string = '';
+  private fechaSeleccionada:string = '';
   public horaSeleccionada:string = '';
 
   public dias = new Array<string>()
   public horarios = new Array<string>();
 
-  constructor(public usuarioService:UsuarioService, 
-    private usuariosService:UsuariosService,
+  constructor(private usuarioService:UsuarioService, 
     private horariosService:HorariosServicesService, 
     private turnosServices:TurnosService,
     private fireStorage:FirestorageService) { 
-    this.pacienteMostar = '';
+    this.pacienteMostrar = '';
     this.especialidad = '';
     this.especialistaMostrar = '';
     
@@ -46,23 +47,25 @@ export class AltaTurnoComponent implements OnInit {
   ngOnInit(): void {
     if(this.usuarioService.usuario['administrador'] != true)
     {
-      this.paciente = this.usuarioService;
+      this.paciente = this.usuarioService.usuario;
+    }else
+    {
+      this.administrador = true;
     }
   }
 
-  public CargarDias(especialistaHorarios:Horarios)
+  private CargarDias(especialistaHorarios:Horarios)
   {
+    this.horarios = [];
     let diasLaborales = new Array<boolean>(5)
     diasLaborales.fill(true);
+    if(especialistaHorarios.lunes == '') diasLaborales[0] = false;
+    if(especialistaHorarios.martes == '') diasLaborales[1] = false;
+    if(especialistaHorarios.miercoles == '') diasLaborales[2] = false;
+    if(especialistaHorarios.jueves == '') diasLaborales[3] = false;
+    if(especialistaHorarios.viernes == '') diasLaborales[4] = false;
+    if(especialistaHorarios.sabado == '') diasLaborales[5] = false;
 
-    if(especialistaHorarios.lunes == ':-:') diasLaborales[0] = false;
-    if(especialistaHorarios.martes == ':-:') diasLaborales[1] = false;
-    if(especialistaHorarios.miercoles == ':-:') diasLaborales[2] = false;
-    if(especialistaHorarios.jueves == ':-:') diasLaborales[3] = false;
-    if(especialistaHorarios.viernes == ':-:') diasLaborales[4] = false;
-    if(especialistaHorarios.sabado == ':-:') diasLaborales[5] = false;
-
-    console.log(diasLaborales);
     let date = new Date();
     let dia = date.getDate();
     let mes = date.getMonth();
@@ -88,7 +91,6 @@ export class AltaTurnoComponent implements OnInit {
         case 11:
           if(dia > 31)
           {
-            console.log()
             dia = 1;
             mes++;
             date.setMonth(mes);
@@ -117,15 +119,58 @@ export class AltaTurnoComponent implements OnInit {
           break
         
       }
-      this.dias.push(dia + '/' + mes);
+      this.dias.push(dia + ' de ' + this.mesToString(mes));
       
       dia++;
       date.setDate(dia);
     }
   }
 
+  private mesToString(mes:number) : string
+  {
+    let mesString = '';
+    switch(mes + 1)
+    {
+      case 1: mesString = "enero";       break;
+      case 2: mesString = "febrero";     break;
+      case 3: mesString = "marzo";       break;
+      case 4: mesString = "abril";       break;
+      case 5: mesString = "mayo";        break;
+      case 6: mesString = "junio";       break;
+      case 7: mesString = "julio";       break;
+      case 8: mesString = "agosto";      break;
+      case 9: mesString = "septiembre";  break;
+      case 10: mesString= "octubre";     break;
+      case 11: mesString= "noviembre";   break;
+      case 12: mesString= "diciembre";   break;
+    }
+    return mesString;
+  }
+
+  private mesToNumber(mes:string) : string
+ {
+    let mesNumber = '';
+    switch(mes)
+    {
+      case 'enero': mesNumber = '1'; break;
+      case 'febrero': mesNumber = '2'; break;
+      case 'marzo': mesNumber = '3';  break;
+      case 'abril': mesNumber = '4';  break;
+      case 'mayo': mesNumber = '5';  break;
+      case 'junio': mesNumber = '6';  break;
+      case 'julio': mesNumber = '7';  break;
+      case 'agosto': mesNumber = '8';  break;
+      case 'septiembre': mesNumber = '9';  break;
+      case 'octubre': mesNumber = '10';  break;
+      case 'noviembre': mesNumber = '11';  break;
+      case 'diciembre': mesNumber = '12';  break;
+    }
+    return mesNumber;
+ }
+
   public CargarEspecialidad(valor:string)
   {
+    this.LimpiarCampos();
     if(valor != '')
     {
       this.especialidad = valor;
@@ -141,6 +186,10 @@ export class AltaTurnoComponent implements OnInit {
       this.especialista = valor;
       this.especialistaMostrar = this.especialista.nombre + ' ' + this.especialista.apellido;
       let aux = this.horariosService.FiltrarPorEspecialista(valor);
+      
+      this.dias = [];
+      this.horarios = [];
+
       this.CargarDias(aux);
     }
 
@@ -152,24 +201,30 @@ export class AltaTurnoComponent implements OnInit {
     if(valor)
     {
       this.paciente = valor;
-      this.pacienteMostar = this.paciente.nombre + ' ' + this.paciente.apellido;
+      this.pacienteMostrar = this.paciente.nombre + ' ' + this.paciente.apellido;
     }
 
     this.mostrarPacientes = false;
   }
 
-
   public CargarHorarios(fecha:string)
   {
-    this.fechaSeleccionada = fecha;
     this.horarios = [];
+    if(this.especialista == undefined)
+    {
+      return;
+    }
+
+    let auxFecha = fecha.split(' ');
+    fecha = auxFecha[0] + '/' + this.mesToNumber(auxFecha[2]) + '/2022';
+    this.fechaSeleccionada = fecha;
     let auxTurnos = this.turnosServices.FiltrarTurnosPorFecha(fecha, this.especialista.id);
     let intervalo = 15;
     let date = new Date();
     
     let fechaSplit = fecha.split('/');
     date.setDate(Number(fechaSplit[0]));
-    date.setMonth(Number(fechaSplit[1]));
+    date.setMonth(Number(fechaSplit[1]) - 1);
     let horario = '';
     
     if(date.getDay() == 1) horario = this.horariosService.FiltrarPorEspecialista(this.especialista).lunes;
@@ -184,31 +239,75 @@ export class AltaTurnoComponent implements OnInit {
     let horaFinal = horarioSplit[1];
     let horaAux = horaInicial;
 
+    let hora = Number(horaAux.split(':')[0]);
+    let minutos = Number(horaAux.split(':')[1]);
+
     for(let i = 0; horaAux != horaFinal; i++)
     {
-      let hora = Number(horaAux.split(':')[0]);
-      let minutos = Number(horaAux.split(':')[1]);
+      let auxHorario;
+      if(minutos.toString().length < 2)
+      {
+        auxHorario = hora.toString() + ':' + '0' + minutos.toString();
+      }
+      else
+      {
+        auxHorario = hora.toString() + ':' + minutos.toString();
+      }
+      
+      if(this.turnosServices.HorarioDisponible(auxTurnos, auxHorario))
+      {
+        this.horarios.push(auxHorario);
+      }
 
       minutos += intervalo;
-      
       if(minutos >= 60)
       {
         minutos -= 60;
         hora++;
       }
-
-      let auxHorario = hora.toString() + ':' + minutos.toString();
-      if(this.turnosServices.HorarioDisponible(auxTurnos, auxHorario))
-      {
-        this.horarios.push(auxHorario);
-      }
       horaAux = auxHorario;
     }
   }
 
-  public SolicitarTurno()
+  public async SolicitarTurno()
   {
-    console.log(this.fechaSeleccionada);
-    this.fireStorage.AgregarTurno(this.especialista.id, this.paciente.usuario.id, this.especialidad, this.fechaSeleccionada, this.horaSeleccionada);
+    if(this.ValidarCampos() && this.especialista != undefined && this.paciente != undefined)
+    {
+      await this.fireStorage.AgregarTurno(this.turnosServices.UltimoID() + 1, this.especialista, this.paciente, this.especialidad, this.fechaSeleccionada, this.horaSeleccionada).then( (ok:Turnos | undefined) =>
+        {
+          if(ok != undefined)
+          {
+            console.log(ok);
+            this.turnosServices.turnos.push(ok);
+            this.LimpiarCampos();
+          }
+        });
+    }
+  }
+
+  private LimpiarCampos()
+  {
+    this.dias = [];
+    this.horarios = [];
+    this.fechaSeleccionada = '';
+    this.horaSeleccionada = '';
+    this.especialistaMostrar = '';
+    this.especialidad = '';
+    this.pacienteMostrar = '';
+    this.especialista = undefined;
+
+    if(this.administrador)
+    {
+      this.paciente = undefined;
+    }
+  }
+
+  private ValidarCampos() : boolean
+  {
+    if(this.fechaSeleccionada != '' && this.horaSeleccionada != '' && this.especialidad != '' && this.especialistaMostrar != '' && this.especialista != undefined && this.paciente != undefined)
+    {
+      return true;
+    }
+    return false;
   }
 }

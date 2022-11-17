@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes</title>
+</head>
+
+<body>
+    <div class="cuerpo">
+            <table>
+                <p>Aqui aparecen los pacientes que atendiste al menos una vez</p>
+                <ng-container *ngFor="let paciente of this.usuariosAtendidos">
+                    <button (click)="this.MostrarHistoria(paciente)" class="boton">
+                        <img [src]="paciente.img" width="64px" height="64px"> 
+                        <br>
+                        {{paciente.nombre + ' ' + paciente.apellido}}
+                    </button>
+                </ng-container>
+                <app-cargar-historia-clinica *ngIf="this.mostrarHistoriaClinica == true" [paciente]="this.pacienteSeleccionado" (volver)="this.mostrarHistoriaClinica = false"></app-cargar-historia-clinica>
+            </table>
+        
+
+
+    </div>
+</body>
+</html>
+

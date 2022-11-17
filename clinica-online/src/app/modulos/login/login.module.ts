@@ -8,6 +8,7 @@ import { IniciarSesionComponent } from './vistas/iniciar-sesion/iniciar-sesion.c
 import { RegistrarseComponent } from './vistas/registrarse/registrarse.component';
 import { RecuperarPasswordComponent } from './vistas/recuperar-password/recuperar-password.component';
 import { CompartidoModule } from 'src/app/VistasCompartidas/compartido/compartido.module';
+import { HomeModule } from '../home/home.module';
 
 
 @NgModule({
@@ -23,15 +24,9 @@ import { CompartidoModule } from 'src/app/VistasCompartidas/compartido/compartid
     ReactiveFormsModule,
     CompartidoModule,
     RecaptchaModule,
-    RecaptchaFormsModule
+    RecaptchaFormsModule,
+    HomeModule
   ],
-  providers: [
-    {
-      provide: RECAPTCHA_SETTINGS,
-      useValue: {
-        siteKey: environment.recaptcha.siteKey,
-      } as RecaptchaSettings,
-    },
-  ]
+  providers: []
 })
 export class LoginModule { }

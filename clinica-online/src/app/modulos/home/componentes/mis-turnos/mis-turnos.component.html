@@ -8,39 +8,80 @@
 </head>
 <body>
     <div class="cuerpo">
-        <p>Aca se muestran todos los turnos</p>
+        <label>Filtros: </label>
         <ng-container *ngIf="this.UsuarioService.usuario.obraSocial">
-            <input type="button" value="Nuevo turno">
+
+            <select id="filtroEspecialista" name="filtroEspecialista" (change)="this.CambiarValor($event, 'especialista')">
+                <option *ngFor="let valor of this.arrayEspecialistas">{{valor}}</option>
+            </select>
+
+            <select id="filtroEspecialidad" name="filtroEspecialidad" (change)="this.CambiarValor($event, 'especialidad')">
+                <option *ngFor="let valor of this.arrayEspecialidades">{{valor}}</option>
+            </select>
+
+            <select id="filtroFecha"  name="filtroFecha" (change)="this.CambiarValor($event, 'fecha')">
+                <option *ngFor="let valor of this.arrayFechas">{{valor}}</option>
+            </select>
+
+            <select id="filtroEstado" name="filtroEstado" (change)="this.CambiarValor($event, 'estado')">
+                <option *ngFor="let valor of this.arrayEstadoTurno">{{valor}}</option>
+            </select>
             
+            <input appPrimerDirectiva [valor]="'Resetear filtro'" type="button" (click)="this.filtro = ''">
+
             <table>
                 <tr>
-                    <th>Especialista</th>
-                    <th>Especialidad</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                    <th appSegundaDirectiva [color]="'green'">Foto del especialista</th>
+                    <th appSegundaDirectiva [color]="'blue'">Especialista</th>
+                    <th appSegundaDirectiva [color]="'yellow'">Especialidad</th>
+                    <th appSegundaDirectiva [color]="'purple'">Fecha</th>
+                    <th appSegundaDirectiva [color]="'brown'">Estado</th>
+                    <th appSegundaDirectiva>Acciones</th>
                 </tr>
 
-                <ng-container *ngFor="let turno of this.turnosServicios.turnos">
+                <ng-container *ngFor="let turno of (this.turnosServicios.turnos | pipeEspecialidad: this.filtro)">
                     <tr *ngIf="turno.paciente.id == this.UsuarioService.usuario.id">
-                        <td>{{turno.especialista.GetNombre() + ' ' + turno.especialista.GetApellido()}}</td>
+                        <td><img [src]="turno.especialista.img" width="64px" height="64px"></td>
+                        <td>{{turno.especialista.nombre + ' ' + turno.especialista.apellido}}</td>
                         <td>{{turno.especialidad}}</td>
-                        <td>{{turno.fecha}} {{turno.hora}}</td>
+                        <td>{{turno.fecha}} {{turno.hora + ' hs'}}</td>
                         <td>{{turno.estadoTurno}}</td>
-                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'cancelado'"><input type="button" value="Cancelar turno" (click)="this.SetComentarioResenia('comentario', 'cancelado')"></td>
-                        <td *ngIf="turno.comentario != '' || turno.resenia != '' "><input type="button" value="Ver reseña/comentario" (click)="this.SetComentarioResenia('verReseniaComentario', this.turno.estadoTurno)"></td>
+                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'cancelado'"><input type="button" value="Cancelar turno" (click)="this.SetComentarioResenia('comentario', 'cancelado', turno)"></td>
+                        <td *ngIf="turno.comentario != '' || turno.resenia != '' "><input type="button" value="Ver reseña/comentario" (click)="this.SetComentarioResenia('verReseniaComentario', this.turno.estadoTurno, turno)"></td>
                         <td *ngIf="turno.estadoTurno == 'realizado' && turno.resenia != '' "><input type="button" value="Completar encuesta"></td>
-                        <td *ngIf="turno.estadoTurno == 'realizado'"><input type="button" value="Calificar atencion" (click)="this.SetComentarioResenia('comentario', this.turno.estadoTurno)"></td>
-                        <app-comentario-resenia *ngIf="this.volver == true" [turno]="turno" [opcion]="this.opcion" (eventoSalir)="this.EventoVolver($event, turno)"></app-comentario-resenia>
+                        <td *ngIf="turno.estadoTurno == 'realizado' && turno.comentario == ''"><input type="button" value="Calificar atencion" (click)="this.SetComentarioResenia('comentario', this.turno.estadoTurno, turno)"></td>
                     </tr>
                 </ng-container>
+
+                <app-comentario-resenia *ngIf="this.volver == true" [turno]="this.turnoSeleccionado" [opcion]="this.opcion" (eventoSalir)="this.EventoVolver($event)"></app-comentario-resenia>
+
             </table>
         
         </ng-container>
 
         <ng-container *ngIf="this.UsuarioService.usuario.validado == true">
+
+            <select id="filtroPaciente" name="filtroPaciente" (change)="this.CambiarValor($event, 'paciente')">
+                <option *ngFor="let valor of this.arrayPaciente">{{valor}}</option>
+            </select>
+
+            <select id="filtroEspecialidad" name="filtroEspecialidad" (change)="this.CambiarValor($event, 'especialidad')">
+                <option *ngFor="let valor of this.arrayEspecialidades">{{valor}}</option>
+            </select>
+
+            <select id="filtroFecha"  name="filtroFecha" (change)="this.CambiarValor($event, 'fecha')">
+                <option *ngFor="let valor of this.arrayFechas">{{valor}}</option>
+            </select>
+
+            <select id="filtroEstado" name="filtroEstado" (change)="this.CambiarValor($event, 'estado')">
+                <option *ngFor="let valor of this.arrayEstadoTurno">{{valor}}</option>
+            </select>
+
+            <input type="button" value="Resetar filtro" (click)="this.filtro = ''">
+            
             <table>
                 <tr>
+                    <th>Foto del paciente</th>
                     <th>Paciente</th>
                     <th>Especialidad</th>
                     <th>Fecha</th>
@@ -48,20 +89,24 @@
                     <th>Acciones</th>
                 </tr>
 
-                <ng-container *ngFor="let turno of this.turnosServicios.turnos">
+                <ng-container *ngFor="let turno of (this.turnosServicios.turnos | pipeEspecialidad: this.filtro)">
                     <tr *ngIf="turno.especialista.id == this.UsuarioService.usuario.id">
-                        <td>{{turno.paciente.GetNombre() + ' ' + turno.paciente.GetApellido()}}</td>
+                        <td><img [src]="turno.paciente.img" width="64px" height="64px"></td>
+                        <td>{{turno.paciente.nombre + ' ' + turno.paciente.apellido}}</td>
                         <td>{{turno.especialidad}}</td>
-                        <td>{{turno.fecha}}</td>
+                        <td>{{turno.fecha + ' ' + turno.hora + ' hs'}}</td>
                         <td>{{turno.estadoTurno}}</td>
-                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'aceptado' && turno.estadoTurno != 'rechazado'"><input type="button" value="Cancelar turno" (click)="this.SetComentarioResenia('comentario', 'cancelado')"></td>
-                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'aceptado' && turno.estadoTurno != 'cancelado'"><input type="button" value="Rechazar turno" (click)="this.SetComentarioResenia('comentario', 'rechazado')"></td>
-                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'cancelado' && turno.estadoTurno != 'rechazado'"><input type="button" value="Aceptar turno" (click)="this.CambiarEstado(turno, 'aceptado')"></td>
-                        <td *ngIf="turno.estadoTurno == 'aceptado'"><input type="button" value="Finalizar turno" (click)="this.SetComentarioResenia('resenia', 'realizado')"></td>
-                        <td *ngIf="turno.comentario != '' || turno.resenia != ''"><input type="button" value="Ver reseña" (click)="this.SetComentarioResenia('verReseniaComentario', this.turno.estadoTurno)"></td>
-                        <app-comentario-resenia *ngIf="this.volver == true" [turno]="turno" [opcion]="this.opcion" (eventoSalir)="this.EventoVolver($event, turno)"></app-comentario-resenia>
+                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'aceptado' && turno.estadoTurno != 'rechazado' && turno.estadoTurno != 'cancelado'"><input type="button" value="Cancelar turno" (click)="this.SetComentarioResenia('comentario', 'cancelado', turno)"></td>
+                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'aceptado' && turno.estadoTurno != 'cancelado' && turno.estadoTurno != 'rechazado'"><input type="button" value="Rechazar turno" (click)="this.SetComentarioResenia('comentario', 'rechazado', turno)"></td>
+                        <td *ngIf="turno.estadoTurno != 'realizado' && turno.estadoTurno != 'cancelado' && turno.estadoTurno != 'rechazado' && turno.estadoTurno != 'aceptado'"><input type="button" value="Aceptar turno" (click)="this.CambiarEstado(turno, 'aceptado')"></td>
+                        <td *ngIf="turno.estadoTurno == 'aceptado'"><input type="button" value="Finalizar turno" (click)="this.SetComentarioResenia('resenia', 'realizado', turno)"></td>
+                        <td *ngIf="turno.comentario != '' || turno.resenia != ''"><input type="button" value="Ver reseña" (click)="this.SetComentarioResenia('verReseniaComentario', this.turno.estadoTurno, turno)"></td>
                     </tr>
                 </ng-container>
+
+                <app-comentario-resenia *ngIf="this.volver == true" [turno]="this.turnoSeleccionado" [opcion]="this.opcion" (eventoSalir)="this.EventoVolver($event)"></app-comentario-resenia>
+                <app-cargar-historia-clinica *ngIf="this.cargarHistoriaClinica == true" [paciente]="this.turnoSeleccionado.paciente" (volver)="this.cargarHistoriaClinica = false" [opcion]="'soloCarga'"></app-cargar-historia-clinica>
+
             </table>
         </ng-container>
 

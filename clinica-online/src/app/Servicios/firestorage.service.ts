@@ -1,9 +1,12 @@
-import { formatDate, registerLocaleData} from '@angular/common';
+import { registerLocaleData} from '@angular/common';
 import localeEsAr from '@angular/common/locales/es-AR';
 import { Injectable } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { getDocs, addDoc, collection, doc, updateDoc} from "firebase/firestore";
+import { Especialidades } from '../Entidades/especialidades';
+import { HistoriaClinica } from '../Entidades/historia-clinica';
 import { Horarios } from '../Entidades/horarios';
+import { LogUsuarios } from '../Entidades/log-usuarios';
 import { Turnos } from '../Entidades/turnos';
 import { Especialista, Paciente } from '../Entidades/usuario';
 import { AuthService } from './auth.service';
@@ -26,11 +29,18 @@ export class FirestorageService {
     return (await this.getProfiles()).length;
   }
 
-  async ObtenerUltimoIDTurnos() : Promise<number>
+  public async ObtenerUltimoIDTurnos()
   {
-    return (await this.getTurnos()).length;
+    let auxId = 0;
+    /*for(let i = 0; this.turnosService.turnos.length; i++)
+    {
+      if(i == 0 || this.turnosService.turnos[i].id > auxId)
+      {
+        auxId = this.turnosService.turnos[i].id;
+      }
+    }*/
+    return auxId;
   }
-
 
   async AgregarUsuarioEspecialista(especialista:Especialista)
   {
@@ -87,15 +97,6 @@ export class FirestorageService {
     })
   }
 
-  async AddLog(email:string)
-  {
-    const docRef = await addDoc(collection(this.db, "logUsuarios"),
-    {
-      email: email,
-      fechaIngreso: new Date(),
-    });
-  }
-
   async getProfile(email:string)
   {
     let usuario = null;
@@ -111,7 +112,7 @@ export class FirestorageService {
     return usuario;
   }
 
-  async getProfileForID(id:number) : (Promise<Especialista | Paciente | any>)
+  async getProfileForID(id:number) : (Promise<Especialista | Paciente | undefined>)
   {
     const querySnapshot = await getDocs(collection(this.db, "usuarios"));
     for(let i = 0; i < querySnapshot.size; i++)
@@ -120,11 +121,13 @@ export class FirestorageService {
       if(profile['id'] == id && (profile['validado'] == true || profile['validado'] == false ) )
       {
         return <Especialista>profile;
-      }else if(profile['id'] == id)
+      }
+      else if(profile['id'] == id)
       {
         return <Paciente>profile;
       }
     }
+    return undefined;
   }
 
   async getProfiles()
@@ -141,7 +144,6 @@ export class FirestorageService {
 
   async ActivarDesactivarUsuario(email:string, valor:boolean)
   {
-    console.log(email);
     let docId = null;
     const querySnapshot = await getDocs(collection(this.db, "usuarios"));
     querySnapshot.forEach((doc) => 
@@ -150,7 +152,6 @@ export class FirestorageService {
       if(datos['email'] == email)
       {
         docId = <string>doc.id;
-        console.log(datos);
       }
     });
 
@@ -240,28 +241,34 @@ export class FirestorageService {
     }
   }     
   
-  async getTurnos() : Promise<Array<Turnos>>
+  async getTurnos() : Promise<Array<Turnos> | undefined>
   {
     let turnos = Array<Turnos>();
     const querySnapshot = await getDocs(collection(this.db, "turnos"));
-    querySnapshot.forEach((doc) =>
+  
+    for(let i = 0; i < querySnapshot.size; i++)
     {
-      let data = doc.data();
+      let datos = querySnapshot.docs[i].data();
       
-      this.getProfileForID(data['idEspecialista']).then((esp:(Especialista | Paciente | any))=>
-        {
-          let especialista = new Especialista(esp.nombre, esp.apellido, esp.edad, esp.dni, esp.email, esp.password, esp.img, esp['especialidad']);
-          especialista.SetID(esp['id']);
-          this.getProfileForID(data['idPaciente']).then( (pac:(Especialista | Paciente | any))=>
-          {
-            let paciente = new Paciente(pac.nombre, pac.apellido, pac.edad, pac.dni, pac.email, pac.password, pac.img, pac['obraSocial'], pac['img2']);
-            paciente.SetID(pac['id']);
-            let nuevoTurno = new Turnos(<Especialista>especialista, <Paciente>paciente, data['especialidad'], data['fecha'], data['hora'], data['estadoTurno'], data['comentario'], data['resenia']);
-            nuevoTurno.id = data['id'];
-            turnos.push(nuevoTurno);
-          });
-        });
-    })
+      let especialista = await this.getProfileForID(datos['idEspecialista']);
+      if(especialista == undefined || especialista instanceof Paciente)
+      {
+        console.log("Se fue por el undefined del especialista");
+        return undefined;
+      }
+
+      let paciente = await this.getProfileForID(datos['idPaciente']);
+      if(paciente == undefined || paciente instanceof Especialista)
+      {
+        console.log("Se fue por el undefined del paciente");
+        return undefined;
+      }
+
+      let nuevoTurno = new Turnos(especialista, paciente, datos['especialidad'], datos['fecha'], datos['hora'], datos['estadoTurno'], datos['comentario'], datos['resenia']);
+      nuevoTurno.id = datos['id'];
+      turnos.push(nuevoTurno);
+    }
+    
     return turnos;
   }
   
@@ -324,9 +331,12 @@ export class FirestorageService {
       }
     }
 
+    console.log(horarios.lunes);
+    console.log(horarios.martes);
+    console.log(horarios.miercoles);
+    console.log(horarios.jueves);
     if(docId != null)
     {
-      console.log(horarios);
       const horarioRef = doc(this.db, 'horarios', docId);
       updateDoc(horarioRef, 
       { 
@@ -345,6 +355,31 @@ export class FirestorageService {
     return true;
   }
 
+  }
+
+  async CrearLog(idUsuario:number)
+  {
+    let fecha = new Date();
+
+    return await addDoc(collection(this.db, "logUsuarios"),
+      {
+        id: idUsuario,
+        fecha: fecha.getDate().toString() + '/' + (fecha.getMonth() + 1).toString() + '/' + fecha.getFullYear(),
+        hora: fecha.getHours().toString() + ':' + fecha.getMinutes().toString(),
+      });
+  }
+
+  async GetLogUsuarios() : Promise<Array<LogUsuarios>>
+  {
+    let logUsuarios = Array<LogUsuarios>();
+    const querySnapshot = await getDocs(collection(this.db, "logUsuarios"));
+    for(let i = 0; i < querySnapshot.size; i++)
+    {
+      let datos = querySnapshot.docs[i].data();
+      let nuevoLog = new LogUsuarios(datos['id'], datos['fecha'], datos['hora']);
+      logUsuarios.push(nuevoLog);
+    }
+    return logUsuarios;
   }
 
   async CrearHorarios(idEspecialista:number, horarios:Horarios)
@@ -426,24 +461,108 @@ export class FirestorageService {
     return null;
   }
 
-  async AgregarTurno(idEspecialista:number, idPaciente:number, especialidad:string, fecha:string, hora:string)
+  async AgregarTurno(id:number, especialista:Especialista, paciente:Paciente, especialidad:string, fecha:string, hora:string) : Promise<Turnos | undefined>
   {
 
-    let total = await this.ObtenerUltimoIDTurnos();
+    console.log(id);
+    let turno = undefined;
+    let date = new Date();
     await addDoc(collection(this.db, "turnos"),
     {
-      id: total + 1,
+      id: id,
       comentario: '',
       especialidad: especialidad,
       estadoTurno: 'esperando decision',
-      fecha: fecha,
+      fecha: fecha + '/' + date.getFullYear().toString(),
       hora: hora,
-      idEspecialista: idEspecialista,
-      idPaciente: idPaciente,
+      idEspecialista: especialista.id,
+      idPaciente: paciente.id,
       resenia:''
+    }).then(ok=>
+      {
+        turno = new Turnos(especialista, paciente, especialidad, fecha, hora, 'esperando decision', '', '');
+        turno.id = id;
+      });
+
+    return turno;
+  }
+
+  async GetEspecialidades() : Promise<Array<Especialidades> | undefined>
+  {
+    let especialidades = Array<Especialidades>();
+    const querySnapshot = await getDocs(collection(this.db, "especialidades"));
+    for(let i = 0; i < querySnapshot.size; i++)
+    {
+      let datos = querySnapshot.docs[i].data();
+      let nuevaEspecialidad = new Especialidades(datos['id'], datos['nombre'], datos['imagen']);
+      especialidades.push(nuevaEspecialidad);
+    }
+    return especialidades;
+  }
+
+  async GetHistoriaClinica(idPaciente:number) : Promise<HistoriaClinica | undefined>
+  {
+    let historia = undefined;
+    const querySnapshot = await getDocs(collection(this.db, "historiasclinicas"));
+    for(let i = 0; i < querySnapshot.size; i++)
+    {
+      let datos = querySnapshot.docs[i].data();
+      if(datos['idPaciente'] == idPaciente)
+      {
+        historia = new HistoriaClinica(datos['idPaciente'], datos['altura'], datos['peso'], datos['temperatura'], datos['presion'], datos['datosExtras']);
+        break;
+      }
+    }
+    return historia;
+  }
+
+  async AgregarHistoriaClinica(historiaClinica:HistoriaClinica) : Promise<boolean>
+  {
+    await addDoc(collection(this.db, "historiasclinicas"),
+    {
+      idPaciente: historiaClinica.idPaciente,
+      altura: historiaClinica.altura,
+      peso: historiaClinica.peso,
+      temperatura: historiaClinica.temperatura,
+      presion: historiaClinica.presion,
+      datosExtras: historiaClinica.datosExtras,
     });
+    return true;
+  }
 
+  async ActualizarHistoriaClinica(historiaClinica:HistoriaClinica) : Promise<boolean>
+  {
+    let docId = undefined;
+    let querySnapshot = await getDocs(collection(this.db, "historiasclinicas"));
+    for(let i = 0; i < querySnapshot.size; i++)
+    {
+      let datos = querySnapshot.docs[i].data();
+      if(datos['idPaciente'] == historiaClinica.idPaciente)
+      {
+        docId = <string>querySnapshot.docs[i].id;
+        break;
+      }
+    }
 
+    if(docId != undefined)
+    {
+      let usuarioRef = doc(this.db, 'historiasclinicas', docId);
+      if(usuarioRef != null)
+      {
+        updateDoc(usuarioRef, 
+          { 
+            idPaciente: historiaClinica.idPaciente,
+            altura: historiaClinica.altura,
+            peso: historiaClinica.peso,
+            temperatura: historiaClinica.temperatura,
+            presion: historiaClinica.presion,
+            datosExtras: historiaClinica.datosExtras,
+          });
+
+          return true;
+      }
+    }
+    return false;
   }
 }
 

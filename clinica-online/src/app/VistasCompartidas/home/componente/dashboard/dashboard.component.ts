@@ -12,6 +12,7 @@ export class DashboardComponent implements OnInit {
 
   @Output() public index = new EventEmitter<string>();
   public administrador:boolean = false;
+  public especialista:boolean = false;
   public img:any;
 
   constructor(private route:Router, public usuarioService:UsuarioService) { }
@@ -20,6 +21,11 @@ export class DashboardComponent implements OnInit {
     if(this.usuarioService.usuario['administrador'] == true)
     {
       this.administrador = true;
+    }
+
+    if(this.usuarioService.usuario['validado'] == true || this.usuarioService.usuario['validado'] == false)
+    {
+      this.especialista = true;
     }
   }
 

@@ -49,26 +49,26 @@ export class ComentarioReseniaComponent implements OnInit {
     }
   }
 
-  public Confirmar()
+  public async Confirmar()
   {
     if(this.comentarioresenia != '' && this.comentarioresenia.length > 10)
     {
       let promise;
       if(this.opcion == 'comentario')
       {
-        promise = this.fireStorage.GuardarComentario(this.turno, this.comentarioresenia);
+        promise = await this.fireStorage.GuardarComentario(this.turno, this.comentarioresenia);
+        this.turno.comentario = this.comentarioresenia;
       }
       else
       {
-        promise = this.fireStorage.GuardarResenia(this.turno, this.comentarioresenia);
+        promise = await this.fireStorage.GuardarResenia(this.turno, this.comentarioresenia);
+        this.turno.resenia = this.comentarioresenia;
       }
       
-      promise.then(ok=>{
-        if(ok)
-        {
-          this.Salir(true);
-        }
-      });
+      if(promise == true){
+        
+        this.Salir(true);
+      }
     }
     else
     {

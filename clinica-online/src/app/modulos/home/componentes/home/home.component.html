@@ -14,6 +14,7 @@
 
             <div *ngIf="this.opcionHome == 'inicio'">
             </div>
+            
     
             <div *ngIf="this.opcionHome == 'alta-turno'">
                 <app-alta-turno></app-alta-turno>
@@ -21,6 +22,18 @@
 
             <div *ngIf="this.opcionHome == 'mis-turnos'">
                 <app-mis-turnos></app-mis-turnos>
+            </div>
+
+            <div *ngIf="this.opcionHome == 'estadisticas'">
+                <app-estadisticas></app-estadisticas>
+            </div>
+
+            <div *ngIf="this.opcionHome == 'pacientes'">
+                <app-pacientes></app-pacientes>
+            </div>
+
+            <div *ngIf="this.opcionHome == 'usuarios'">
+                <app-mostrar-pacientes [opcion]="'historias-clinicas'"></app-mostrar-pacientes>
             </div>
 
             <div *ngIf="this.opcionHome == 'perfil'">

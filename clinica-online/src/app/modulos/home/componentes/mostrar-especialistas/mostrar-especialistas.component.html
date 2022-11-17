@@ -1,15 +1,11 @@
 <div class="cuerpo">
-    <table>
-        <tr>
-            <th>Especialista</th>
-            <th>Accion</th>
-        </tr>
+    <button *ngFor="let especialista of this.especialistas" (click)="this.Seleccionar(especialista)" style="width: 80px; height: 100px;">
+        <img [src]="especialista.img">
+        <br>
+        <label>{{especialista.nombre + ' ' + especialista.apellido}}</label>
+    </button>
 
-        <tr *ngFor="let especialista of this.especialistas">
-            <td>{{especialista.nombre + ' ' + especialista.apellido}}</td>
-            <td><input type="button" value="Seleccionar" (click)="this.Seleccionar(especialista)"></td>
-        </tr>
-    </table>
+    <br><br>
 
     <input type="button" value="Volver" (click)="this.Volver()">
 </div>
